@@ -1,11 +1,11 @@
 import EventEmitter from "./eventEmitter";
 
-const eEmitter = new EventEmitter();
+const contentListener = new EventEmitter();
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   const { event, args } = request;
-  const res = await eEmitter.emit(event, ...args);
+  const res = await contentListener.emit(event, ...args);
   sendResponse(res);
 });
 
-export default eEmitter;
+export default contentListener;
