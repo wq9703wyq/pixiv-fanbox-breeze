@@ -12,6 +12,7 @@ const root = resolve(__dirname, 'src');
 const pagesDir = resolve(root, 'pages');
 const cssDir = resolve(root, 'style');
 const exComponentDir = resolve(root, 'components/exCommon');
+const configDir = resolve(root, 'config');
 const outDir = resolve(__dirname, 'dist');
 const assetsDir = resolve(root, 'assets');
 const publicDir = resolve(__dirname, 'public');
@@ -34,7 +35,8 @@ export default defineConfig({
       { find: '/@assets', replacement: assetsDir },
       { find: '/@pages', replacement: pagesDir },
       { find: '/@css', replacement: cssDir },
-      { find: '/@exCom', replacement: exComponentDir }
+      { find: '/@exCom', replacement: exComponentDir },
+      { find: '/@config', replacement: configDir }
     ],
   },
   publicDir,

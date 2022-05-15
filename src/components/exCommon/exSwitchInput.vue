@@ -3,16 +3,9 @@
     <el-switch v-model="isInput" size="small" />
     <el-input-number
       class="ex-swtich-input__number"
-      v-model="num"
-      size="small"
-      :controls="false"
-      unit="¥"
-    />
-    <!-- <span>-</span> -->
-    <el-input-number
-      class="ex-swtich-input__number"
-      v-model="num"
-      size="small"
+      v-for="(item, index) in num"
+      :key="index"
+      v-model="num[index]"
       :controls="false"
       unit="¥"
     />
@@ -21,7 +14,14 @@
 
 <script setup>
 import { ref } from "vue";
-let num = ref(undefined);
+const props = defineProps({
+  modelValue: {
+    type: Array,
+    default: () => [],
+  },
+});
+
+let num = ref([...props.modelValue]);
 let isInput = ref(false);
 </script>
 
