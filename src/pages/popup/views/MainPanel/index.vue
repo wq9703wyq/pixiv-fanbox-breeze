@@ -29,18 +29,21 @@ import { ElDatePicker } from "element-plus";
 import exCheckBoxGroup from "/@exCom/exCheckBoxGroup.vue";
 import exSwitchInput from "/@exCom/exSwitchInput.vue";
 import exNameRuleInput from "/@exCom/exNameRuleInput.vue";
+import exFolderNameDrop from "/@exCom/exFolderNameDrop.vue";
 import { ref } from "vue";
 
 const exComponents = {
   ElDatePicker,
   exCheckBoxGroup,
   exSwitchInput,
-  exNameRuleInput
+  exNameRuleInput,
+  exFolderNameDrop
 };
 let mainPanelForm = ref({
   fileTypeCheckList: [],
   price: Array(2),
-  date: ''
+  date: '',
+  nameRule: ''
 });
 </script>
 

@@ -1,16 +1,18 @@
 <template>
   <div class="ex-folder-name-drop" @click="inputFoucus">
-    <el-input
+    <input
       :ref="$refs.input"
+      id="input"
       class="ex-folder-name-drop__input"
       v-model="_value"
       size="small"
-    ></el-input>
+    />
     <el-dropdown
       trigger="click"
       type="text"
-      :hide-on-click="false"
       @command="handleCommad"
+      :hide-on-click="true"
+      @visible-change="setSelectionIndex"
     >
       <el-icon class="ex-folder-name-drop__btn"><ArrowDownBold /></el-icon>
       <template #dropdown>
@@ -38,6 +40,7 @@ const props = defineProps({
 const $emit = defineEmits(["change", "update:modelValue"]);
 
 const value = ref(props.modelValue);
+const selectionIndex = ref(0);
 
 const $refs = {
   input: ref(null),
@@ -49,13 +52,35 @@ const _value = computed({
     $emit("update:modelValue", val);
   },
 });
-watch(props.modelValue, (val) => {
-  value.value = val;
-});
+watch(
+  () => props.modelValue,
+  (val) => {
+    value.value = val;
+  }
+);
 function handleCommad(command) {
-  _value.value = `${_value.value}${command}`;
+  const selectionStart = $refs.input.value.selectionStart;
+  const selectionEnd = $refs.input.value.selectionEnd;
+  if (selectionStart === selectionEnd) {
+    _value.value = `${_value.value.slice(
+      0,
+      selectionStart
+    )}${command}${_value.value.slice(selectionStart)}`;
+  } else {
+    _value.value = `${_value.value.slice(
+      0,
+      selectionStart
+    )}${command}${_value.value.slice(selectionEnd)}`;
+  }
+  selectionIndex.value = selectionStart + command.length;
 }
-
+function setSelectionIndex(visible) {
+  if (!visible) {
+    inputFoucus();
+    $refs.input.value.selectionStart = selectionIndex.value;
+    $refs.input.value.selectionEnd = selectionIndex.value;
+  }
+}
 function inputFoucus() {
   $refs.input.value.focus();
 }
@@ -67,18 +92,13 @@ function inputFoucus() {
   height: 24px;
   padding: 3px 15px;
   border-radius: 3px;
-  background-color: var(--primary-color-8);
+  background-color: var(--primary-color-7);
   cursor: text;
   &__input {
-    ::v-deep {
-      .el-input__wrapper {
-        background-color: unset;
-        box-shadow: none;
-        .el-input__inner {
-          color: var(--text-btn);
-        }
-      }
-    }
+    border: none;
+    outline: none;
+    background-color: unset;
+    color: var(--text-btn);
   }
   .ex-folder-name-drop__btn {
     line-height: 24px;

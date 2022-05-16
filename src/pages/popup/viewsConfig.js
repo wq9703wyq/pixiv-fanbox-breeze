@@ -21,7 +21,6 @@ export const mainPanelForm = [
   {
     label: '设置命名规则',
     prop: 'nameRule',
-    component: 'exNameRuleInput',
-    class: 'label-position__top'
+    component: 'exFolderNameDrop'
   }
 ]
