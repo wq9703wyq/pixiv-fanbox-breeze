@@ -2,6 +2,7 @@
   <div class="ex-swtich-input">
     <el-switch v-model="isInput" size="small" />
     <el-input-number
+      v-show="!isInput"
       class="ex-swtich-input__number"
       v-for="(item, index) in num"
       :key="index"
@@ -27,6 +28,7 @@ let isInput = ref(false);
 
 <style lang="scss" scoped>
 .ex-swtich-input {
+  height: 35px;
   &__number {
     margin-right: 10px;
     ::v-deep .el-input__wrapper {

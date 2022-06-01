@@ -89,12 +89,14 @@ function inputFoucus() {
 <style lang="scss" scoped>
 .ex-folder-name-drop {
   display: flex;
+  width: 100%;
   height: 24px;
   padding: 3px 15px;
   border-radius: 3px;
   background-color: var(--primary-color-7);
   cursor: text;
   &__input {
+    width: 100%;
     border: none;
     outline: none;
     background-color: unset;

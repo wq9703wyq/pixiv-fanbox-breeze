@@ -14,23 +14,26 @@
             v-bind="item.attrs"
           />
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="grabDraft">抓取</el-button>
+        </el-form-item>
       </el-from>
     </div>
-    <div class="pixiv-main-panel-lists">
-      
-    </div>
+    <div class="pixiv-main-panel-lists"></div>
     <div class="pixiv-main-panel-foot"></div>
   </div>
 </template>
 
 <script setup>
 import { mainPanelForm as mainPanelFormConfig } from "/@pages/popup/viewsConfig";
+
 import { ElDatePicker } from "element-plus";
 import exCheckBoxGroup from "/@exCom/exCheckBoxGroup.vue";
 import exSwitchInput from "/@exCom/exSwitchInput.vue";
 import exNameRuleInput from "/@exCom/exNameRuleInput.vue";
 import exFolderNameDrop from "/@exCom/exFolderNameDrop.vue";
 import { ref } from "vue";
+import popupSender from "/@/utils/popupSender";
 
 const exComponents = {
   ElDatePicker,
@@ -39,12 +42,18 @@ const exComponents = {
   exNameRuleInput,
   exFolderNameDrop
 };
-let mainPanelForm = ref({
+const mainPanelForm = ref({
   fileTypeCheckList: [],
   price: Array(2),
   date: '',
   nameRule: ''
 });
+
+const grabDraft = async function() {
+  // const [tab] = await popupSender.getCurrentTab((res) => {console.log(res)});
+  // console.log(chrome.tabs)
+  popupSender.sendMsgToCurrentTab('grabDraftByUser')
+}
 </script>
 
 <style lang="scss" scoped>

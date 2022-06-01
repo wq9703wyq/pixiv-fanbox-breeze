@@ -16,6 +16,7 @@ const configDir = resolve(root, 'config');
 const outDir = resolve(__dirname, 'dist');
 const assetsDir = resolve(root, 'assets');
 const publicDir = resolve(__dirname, 'public');
+const apiDir = resolve(root, 'api')
 
 export default defineConfig({
   plugins: [
@@ -36,7 +37,8 @@ export default defineConfig({
       { find: '/@pages', replacement: pagesDir },
       { find: '/@css', replacement: cssDir },
       { find: '/@exCom', replacement: exComponentDir },
-      { find: '/@config', replacement: configDir }
+      { find: '/@config', replacement: configDir },
+      { find: '/@api', replacement: apiDir }
     ],
   },
   publicDir,

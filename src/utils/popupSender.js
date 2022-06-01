@@ -13,13 +13,17 @@
 class PopupSender {
   constructor() { }
   async getCurrentTab(callback) {
-    this.currentTab = await chrome.tabs.getCurrent(callback);
+    // this.currentTab = await chrome.tabs.getCurrent(callback);
+    this.currentTab = await chrome.tabs.query({ active: true, currentWindow: true });
     return this.currentTab;
   }
-  sendMsgToTab(id, msg, callback) {
-    return chrome.tabs.sendMessage(id, msg, callback)
+  async sendMsgToCurrentTab(event, msg, callback) {
+    await this.getCurrentTab();
+    let { id } = this.currentTab[0];
+    const eventBody = { event, args: [...(msg || [])] }
+    return chrome.tabs.sendMessage(id, eventBody, callback)
   }
-} 
+}
 
 const _popupSender = new PopupSender();
 
