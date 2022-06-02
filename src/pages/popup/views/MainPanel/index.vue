@@ -33,27 +33,29 @@ import exSwitchInput from "/@exCom/exSwitchInput.vue";
 import exNameRuleInput from "/@exCom/exNameRuleInput.vue";
 import exFolderNameDrop from "/@exCom/exFolderNameDrop.vue";
 import { ref } from "vue";
-import popupSender from "/@/utils/popupSender";
+import PopupSender from "/@/utils/popupSender";
 
 const exComponents = {
   ElDatePicker,
   exCheckBoxGroup,
   exSwitchInput,
   exNameRuleInput,
-  exFolderNameDrop
+  exFolderNameDrop,
 };
 const mainPanelForm = ref({
   fileTypeCheckList: [],
   price: Array(2),
-  date: '',
-  nameRule: ''
+  date: "",
+  nameRule: "",
 });
 
-const grabDraft = async function() {
-  // const [tab] = await popupSender.getCurrentTab((res) => {console.log(res)});
-  // console.log(chrome.tabs)
-  popupSender.sendMsgToCurrentTab('grabDraftByUser')
-}
+const grabDraft = async function () {
+  const _popupSender = new PopupSender();
+  const res = await _popupSender.connectToCurrentTab({
+    event: "grabDraftByUser",
+  });
+  console.log(res);
+};
 </script>
 
 <style lang="scss" scoped>

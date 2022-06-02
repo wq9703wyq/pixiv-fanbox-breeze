@@ -9,6 +9,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "element-plus": "^2.1.11",
     "nodemon": "^2.0.15",
     "vue": "^3.2.25"

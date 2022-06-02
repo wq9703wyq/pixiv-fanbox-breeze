@@ -1,39 +1,25 @@
+import axios from "axios";
 export default class Api {
-  static request(url) {
-    return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: 'get',
-        credentials: 'include',
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.json()
-          } else {
-            // 第一种异常，请求成功但状态不对
-            reject({
-              status: response.status,
-              statusText: response.statusText,
-            })
-          }
-        })
-        .then((data) => {
-          resolve(data)
-        })
-        .catch((error) => {
-          // 第二种异常，请求失败
-          reject(error)
-        })
-    })
-  }
-  static assembleURL(
-    baseURL,
-    args
-  ) {
-    const temp = new URL(baseURL)
-    for (const [key, value] of Object.entries(args)) {
-      value && temp.searchParams.append(key, value.toString())
+  static BASE_URL = `https://api.fanbox.cc`;
+  static createInstance() {
+    const instance = axios.create({ withCredentials: true });
+    const resolveFn = (res) => {
+      const { status, statusText } = res
+      if (statusText) {
+        Promise.reject({ statusText, status })
+      }
+      return res;
     }
-    return temp.toString()
+    const rejectFn = (err) => {
+      Promise.reject(err)
+    }
+    instance.interceptors.response.use(resolveFn, rejectFn)
+    return instance;
+  }
+  static request = this.createInstance();
+
+  static assembleParams(args) {
+    return Object.fromEntries(Object.entries(args).filter(([key, value]) => value));
   }
 
   static getUserId(url) {
@@ -42,18 +28,19 @@ export default class Api {
     return userId;
   }
 
-  static async getPostListByUser(
-    creatorId,
-    limit = 10,
-    maxPublishedDatetime = '',
-    maxId = ''
+  static getPostListByUser(
+    { creatorId,
+      limit = 300,
+      maxPublishedDatetime = '',
+      maxId = '' }
   ) {
-    const baseURL = `https://api.fanbox.cc/post.listCreator?creatorId=${creatorId}`
-    const url = this.assembleURL(baseURL, {
-      limit,
-      maxPublishedDatetime,
-      maxId,
+    return this.request.get(`${this.BASE_URL}/post.listCreator`, {
+      params: this.assembleParams({
+        creatorId,
+        limit,
+        maxPublishedDatetime,
+        maxId
+      })
     })
-    return this.request(url)
   }
 }

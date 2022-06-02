@@ -11,20 +11,31 @@
 // });
 
 class PopupSender {
-  constructor() { }
-  async getCurrentTab(callback) {
-    // this.currentTab = await chrome.tabs.getCurrent(callback);
-    this.currentTab = await chrome.tabs.query({ active: true, currentWindow: true });
-    return this.currentTab;
+  constructor() {
+    this.currentTab = this.getCurrentTab();
   }
-  async sendMsgToCurrentTab(event, msg, callback) {
-    await this.getCurrentTab();
-    let { id } = this.currentTab[0];
-    const eventBody = { event, args: [...(msg || [])] }
-    return chrome.tabs.sendMessage(id, eventBody, callback)
+  async getCurrentTab() {
+    const currentTab = await chrome.tabs.query({ active: true, currentWindow: true });
+    return currentTab;
+  }
+  // async sendMsgToCurrentTab({ event, msg, callback }) {
+  //   await this.getCurrentTab();
+  //   let { id } = this.currentTab[0];
+  //   const eventBody = { event, args: [...(msg || [])] }
+  //   chrome.tabs.sendMessage(id, eventBody, callback);
+
+  // }
+  async connectToCurrentTab({ id, event, args }) {
+    const currentTab = await this.currentTab;
+    id = id || currentTab[0].id
+    this.currentPort = chrome.tabs.connect(id);
+    this.currentPort.postMessage({ args, event });
+    return new Promise((resolve) => {
+      this.currentPort.onMessage.addListener(response => {
+        resolve(response)
+      })
+    });
   }
 }
 
-const _popupSender = new PopupSender();
-
-export default _popupSender
+export default PopupSender

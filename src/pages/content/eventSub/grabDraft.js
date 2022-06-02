@@ -1,8 +1,9 @@
 import Api from "/@api/index"
 export default {
-  grabDraftByUser: async () => {
-    const userId = Api.getUserId(location.href);
-    const list = await Api.getPostListByUser(userId);
-    console.log(list)
+  grabDraftByUser: async (args) => {
+    const creatorId = Api.getUserId(location.href);
+    const res = await Api.getPostListByUser({ creatorId, ...args });
+    console.log(res)
+    return res
   }
 }
