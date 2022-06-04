@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 鹿角兔子
+ * @Date: 2022-06-04 22:12:27
+ * @LastEditors: 鹿角兔子
+ * @LastEditTime: 2022-06-04 22:28:19
+-->
 <template>
   <div class="pixiv-main-panel">
     <div class="pixiv-main-panel-form">
@@ -53,6 +61,11 @@ const grabDraft = async function () {
   const _popupSender = new PopupSender();
   const res = await _popupSender.connectToCurrentTab({
     event: "grabDraftByUser",
+    args: {
+      filterParams: {
+        ...mainPanelForm.value,
+      },
+    },
   });
   console.log(res);
 };

@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: 鹿角兔子
+ * @Date: 2022-06-04 21:13:26
+ * @LastEditors: 鹿角兔子
+ * @LastEditTime: 2022-06-04 21:29:50
+ */
 import axios from "axios";
 export default class Api {
   static BASE_URL = `https://api.fanbox.cc`;
@@ -8,7 +16,7 @@ export default class Api {
       if (statusText) {
         Promise.reject({ statusText, status })
       }
-      return res;
+      return res.data;
     }
     const rejectFn = (err) => {
       Promise.reject(err)
