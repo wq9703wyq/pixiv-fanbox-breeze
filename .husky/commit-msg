@@ -1,0 +1,12 @@
+###
+ # @Descripttion: 
+ # @version: 
+ # @Author: 鹿角兔子
+ # @Date: 2022-06-05 17:40:41
+ # @LastEditors: 鹿角兔子
+ # @LastEditTime: 2022-06-05 19:23:03
+### 
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx --no-install commitlint --edit "$1"
