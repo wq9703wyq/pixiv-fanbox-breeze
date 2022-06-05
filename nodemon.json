@@ -1,8 +1,8 @@
 {
   "watch": [
-    "src", "utils", "vite.config.js"
+    "src", "utils", "vite.config.js", "style"
   ],
-  "ext": "vue,css,html,js",
+  "ext": "vue,css,html,js,scss,json",
   "ignore": [
     "src/**/*.spec.js"
   ],

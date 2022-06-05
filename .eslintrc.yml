@@ -6,11 +6,11 @@ extends:
   - airbnb-base
   - plugin:vue/recommended
   - prettier
-  - prettier/vue
 globals:
   gio: true
+parser: "@babel/eslint-parser"
 parserOptions:
-  parser: babel-eslint
+  requireConfigFile: false
 rules:
   no-restricted-globals:
     - off

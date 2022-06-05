@@ -1,3 +1,0 @@
-hoos:
-  pre-commint: lint-staged
-  commint-msg: commintlint --edit $1

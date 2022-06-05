@@ -1,16 +1,15 @@
 import { createApp } from 'vue';
 import App from './index.vue';
-// console.log(document)
-createApp(App).mount('#app');
+import elementPlus from '/@/element-plus';
+import elementIcon from "/@/element-plus/icon"
+import "/@css/var.scss";
+import "/@css/element-plus.scss"
+import "/@/utils/popupSender";
+// import "/@css/element-plus.css"
 
-function sendMessageToContentScript(message, callback) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
-      if (callback) callback(response);
-    });
-  });
+const app = createApp(App);
+Object.values(elementPlus).forEach(item => app.use(item))
+for (const [key, component] of Object.entries(elementIcon)) {
+  app.component(key, component)
 }
-sendMessageToContentScript({ event: 'test', args: ['你好，我是popup！'] }, function (response) {
-  console.log('来自content的回复：' + response);
-
-});
+app.mount('#app');

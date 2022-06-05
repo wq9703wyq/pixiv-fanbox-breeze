@@ -1,0 +1,22 @@
+[
+  {
+    "label": "{user}",
+    "desc": "画师名字"
+  },
+  {
+    "label": "{uid}",
+    "desc": "画师ID"
+  },
+  {
+    "label": "{title}",
+    "desc": "投稿标题"
+  },
+  {
+    "label": "{pubulishDate}",
+    "desc": "投稿发布日期"
+  },
+  {
+    "label": "{fee}",
+    "desc": "投稿价格"
+  }
+]

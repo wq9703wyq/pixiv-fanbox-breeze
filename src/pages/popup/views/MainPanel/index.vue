@@ -1,0 +1,90 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 鹿角兔子
+ * @Date: 2022-06-04 22:12:27
+ * @LastEditors: 鹿角兔子
+ * @LastEditTime: 2022-06-04 22:28:19
+-->
+<template>
+  <div class="pixiv-main-panel">
+    <div class="pixiv-main-panel-form">
+      <el-from v-model="mainPanelForm" label-width="120">
+        <el-form-item
+          v-for="item in mainPanelFormConfig"
+          :key="item.prop"
+          :label="item.label"
+          :class="item.class"
+        >
+          <component
+            :is="exComponents[item.component]"
+            v-model="mainPanelForm[item.prop]"
+            v-bind="item.attrs"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="grabDraft">抓取</el-button>
+        </el-form-item>
+      </el-from>
+    </div>
+    <div class="pixiv-main-panel-lists"></div>
+    <div class="pixiv-main-panel-foot"></div>
+  </div>
+</template>
+
+<script setup>
+import { mainPanelForm as mainPanelFormConfig } from "/@pages/popup/viewsConfig";
+
+import { ElDatePicker } from "element-plus";
+import exCheckBoxGroup from "/@exCom/exCheckBoxGroup.vue";
+import exSwitchInput from "/@exCom/exSwitchInput.vue";
+import exNameRuleInput from "/@exCom/exNameRuleInput.vue";
+import exFolderNameDrop from "/@exCom/exFolderNameDrop.vue";
+import { ref } from "vue";
+import PopupSender from "/@/utils/popupSender";
+
+const exComponents = {
+  ElDatePicker,
+  exCheckBoxGroup,
+  exSwitchInput,
+  exNameRuleInput,
+  exFolderNameDrop,
+};
+const mainPanelForm = ref({
+  fileTypeCheckList: [],
+  price: Array(2),
+  date: "",
+  nameRule: "",
+});
+
+const grabDraft = async function () {
+  const _popupSender = new PopupSender();
+  const res = await _popupSender.connectToCurrentTab({
+    event: "grabDraftByUser",
+    args: {
+      filterParams: {
+        ...mainPanelForm.value,
+      },
+    },
+  });
+  console.log(res);
+};
+</script>
+
+<style lang="scss" scoped>
+.pixiv-main-panel {
+  width: 660px;
+  height: 500px;
+  padding: 20px;
+
+  ::v-deep {
+    .el-form {
+      &-item {
+        &.label-position__top {
+          display: block;
+        }
+      }
+    }
+  }
+}
+</style>
