@@ -1,1 +1,1 @@
-import "./eventSub/index"
+import "./eventSub/index";

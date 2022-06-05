@@ -4,7 +4,7 @@
  * @Author: 鹿角兔子
  * @Date: 2022-06-05 17:42:27
  * @LastEditors: 鹿角兔子
- * @LastEditTime: 2022-06-05 19:35:19
+ * @LastEditTime: 2022-06-05 20:00:31
  */
 const { ESLint } = require("eslint");
 const micromatch = require('micromatch');
@@ -21,11 +21,10 @@ function rules(...args) {
 }
 
 module.exports = async (files) => {
-  const vueLint = await (rules(eslint, stylelint, prettier)(micromatch(files, ["*.vue"])));
-  const jsLint = await (rules(eslint, prettier)(micromatch(files, ["*.js"])));
-  const scssLint = await (rules(stylelint, prettier)(micromatch(files, ["*.scss"])));
-  const docLint = await (rules(prettier)(micromatch(files, ["*.{html,yml,json,md}"])))
-
+  const vueLint = await (rules(eslint, stylelint, prettier)(micromatch(files, ["**/*.vue"])));
+  const jsLint = await (rules(eslint, prettier)(micromatch(files, ["**/*.js"])));
+  const scssLint = await (rules(stylelint, prettier)(micromatch(files, ["**/*.scss"])));
+  const docLint = await (rules(prettier)(micromatch(files, ["**/*.{html,yml,json,md}"])))
   const linters = [...vueLint, ...jsLint, ...scssLint, ...docLint]
   return linters
 }
