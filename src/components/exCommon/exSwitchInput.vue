@@ -1,20 +1,30 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 鹿角兔子
+ * @Date: 2022-06-05 21:36:14
+ * @LastEditors: 鹿角兔子
+ * @LastEditTime: 2022-06-05 23:59:28
+-->
 <template>
   <div class="ex-swtich-input">
     <el-switch v-model="isInput" size="small" />
     <el-input-number
-      v-show="!isInput"
-      class="ex-swtich-input__number"
       v-for="(item, index) in num"
+      v-show="isInput"
       :key="index"
       v-model="num[index]"
+      class="ex-swtich-input__number"
       :controls="false"
       unit="¥"
+      @input="$emit('update:modelValue', [...num])"
     />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -22,8 +32,16 @@ const props = defineProps({
   },
 });
 
-let num = ref([...props.modelValue]);
-let isInput = ref(false);
+const $emit = defineEmits(["update:modelValue"]);
+
+const num = ref(...props.modelValue);
+const isInput = ref(false);
+watch(
+  () => props.modelValue,
+  (val) => {
+    num.value = [...val];
+  }
+);
 </script>
 
 <style lang="scss" scoped>

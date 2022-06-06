@@ -1,11 +1,3 @@
-/*
- * @Descripttion: 
- * @version: 
- * @Author: 鹿角兔子
- * @Date: 2022-06-04 21:54:37
- * @LastEditors: 鹿角兔子
- * @LastEditTime: 2022-06-04 21:54:37
- */
 // function sendMessageToContentScript(message, callback) {
 //   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 //     chrome.tabs.sendMessage(tabs[0].id, message, function (response) {
@@ -20,11 +12,15 @@
 
 class PopupSender {
   constructor() {
-    this.currentTab = this.getCurrentTab();
+    this.getCurrentTab();
   }
+
   async getCurrentTab() {
-    const currentTab = await chrome.tabs.query({ active: true, currentWindow: true });
-    return currentTab;
+    const currentTab = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    this.currentTab = currentTab;
   }
   // async sendMsgToCurrentTab({ event, msg, callback }) {
   //   await this.getCurrentTab();
@@ -35,18 +31,18 @@ class PopupSender {
   // }
   popupListener() {
     return new Promise((resolve) => {
-      this.currentPort.onMessage.addListener(response => {
-        resolve(response)
-      })
-    })
+      this.currentPort.onMessage.addListener((response) => {
+        resolve(response);
+      });
+    });
   }
+
   async connectToCurrentTab({ id, event, args }) {
     const currentTab = await this.currentTab;
-    id = id || currentTab[0].id
-    this.currentPort = chrome.tabs.connect(id);
-    this.currentPort.postMessage({ args, event });
-    return this.popupListener()
+    this.currentPort = chrome.tabs.connect(id || currentTab[0].id);
+    this.currentPort.postMessage({ args: args || {}, event });
+    return this.popupListener();
   }
 }
 
-export default PopupSender
+export default PopupSender;

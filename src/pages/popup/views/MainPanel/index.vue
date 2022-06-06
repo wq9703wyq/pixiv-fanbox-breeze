@@ -4,7 +4,7 @@
  * @Author: 鹿角兔子
  * @Date: 2022-06-04 22:12:27
  * @LastEditors: 鹿角兔子
- * @LastEditTime: 2022-06-04 22:28:19
+ * @LastEditTime: 2022-06-06 00:00:02
 -->
 <template>
   <div class="pixiv-main-panel">
@@ -23,7 +23,13 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="grabDraft">抓取</el-button>
+          <el-button
+            v-loading="grabLoading"
+            type="primary"
+            :disabled="grabLoading"
+            @click="grabDraft"
+            ><span>抓取</span></el-button
+          >
         </el-form-item>
       </el-from>
     </div>
@@ -56,19 +62,41 @@ const mainPanelForm = ref({
   date: "",
   nameRule: "",
 });
+const grabLoading = ref(false);
+
+const getUserPlanList = async function () {
+  const _popupSender = new PopupSender();
+  const [res] = await _popupSender.connectToCurrentTab({
+    event: "getUserPlanList",
+  });
+  const topPrice = res.find((item) => item.paymentMethod)?.fee;
+  mainPanelForm.value.price = [0, topPrice || 0];
+};
 
 const grabDraft = async function () {
   const _popupSender = new PopupSender();
-  const res = await _popupSender.connectToCurrentTab({
-    event: "grabDraftByUser",
-    args: {
-      filterParams: {
-        ...mainPanelForm.value,
+  const filterParams = {
+    ...mainPanelForm.value,
+    price: mainPanelForm.value.price.some((item) => item)
+      ? mainPanelForm.value.price
+      : false,
+  };
+  grabLoading.value = true;
+  const res = await _popupSender
+    .connectToCurrentTab({
+      event: "grabDraftByUser",
+      args: {
+        filterParams,
       },
-    },
-  });
-  console.log(res);
+    })
+    .catch(() => {
+      grabLoading.value = false;
+    });
+  grabLoading.value = false;
+  return res;
 };
+
+getUserPlanList();
 </script>
 
 <style lang="scss" scoped>
