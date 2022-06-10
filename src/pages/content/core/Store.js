@@ -1,12 +1,12 @@
 class Store {
-  form = {}
-  userInfo = {}
+  form = {};
+
+  userInfo = {};
 
   setFilter(form) {
     this.form = {
-      ...form
-    }
+      ...form,
+    };
   }
 }
-
 export const store = new Store();
