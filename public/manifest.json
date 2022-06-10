@@ -1,6 +1,12 @@
 {
   "manifest_version": 3,
   "name": "vite-chrome-extension-template",
+  "permissions": [
+    "downloads"
+  ],
+  "host_permissions": [
+    "*://*.fanbox.cc/*"
+  ],
   "version": "0.0.0",
   "options_page": "src/pages/options/index.html",
   "background": {
@@ -16,8 +22,7 @@
   "content_scripts": [
     {
       "matches": [
-        "http://*/*",
-        "https://*/*",
+        "*://*.fanbox.cc/*",
         "<all_urls>"
       ],
       "js": [

@@ -15,12 +15,11 @@ class PopupSender {
     this.getCurrentTab();
   }
 
-  async getCurrentTab() {
-    const currentTab = await chrome.tabs.query({
+  getCurrentTab() {
+    this.currentTab = chrome.tabs.query({
       active: true,
       currentWindow: true,
     });
-    this.currentTab = currentTab;
   }
   // async sendMsgToCurrentTab({ event, msg, callback }) {
   //   await this.getCurrentTab();

@@ -8,10 +8,15 @@
  */
 import Api from "/@api/index"
 import GrabDraftBase from "./GrabDraftBase"
+import { store } from "./Store";
 
 class GrabDraftUser extends GrabDraftBase {
+    // constructor({ filterParams }) {
+    //     super({ filterParams })
+    // }
     async grabDraftList({ apiParams, filterParams }) {
         const creatorId = Api.getUserId(location.href);
+        store.setFilter(filterParams);
         const { body } = await Api.getPostListByUser(apiParams || { creatorId });
         this.nextUrl = body?.nextUrl;
         this.draftList.push(...body.items);

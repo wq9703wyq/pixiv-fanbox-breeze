@@ -3,6 +3,8 @@ import packageJson from '../package.json';
 const manifest = {
   manifest_version: 3,
   name: packageJson.name,
+  permissions: ['downloads'],
+  host_permissions: ["*://*.fanbox.cc/*"],
   version: packageJson.version,
   description: packageJson.description,
   options_page: 'src/pages/options/index.html',
@@ -19,7 +21,7 @@ const manifest = {
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+      matches: ['*://*.fanbox.cc/*', '<all_urls>'],
       js: ['src/pages/content/index.js'],
       css: ['contentStyle.css'],
     },

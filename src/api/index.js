@@ -63,4 +63,8 @@ export default class Api {
       params: this.assembleParams({ creatorId }),
     });
   }
+  static async getPost(postId) {
+    const url = `${this.BASE_URL}/post.info?postId=${postId}`
+    return this.request.get(url)
+  }
 }

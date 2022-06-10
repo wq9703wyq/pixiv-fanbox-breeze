@@ -10,8 +10,9 @@ import GrabDraftUser from "../core/GrabDraftUser";
 
 export default {
   grabDraftByUser: async (args) => {
-    const _grabDraftUser = new GrabDraftUser();
+    const _grabDraftUser = new GrabDraftUser({ filterParams: args.filterParams || {} });
     await _grabDraftUser.grabDraftList(args);
-    return _grabDraftUser.filterDraftList;
+    // return _grabDraftUser.filterDraftList;
+    return _grabDraftUser.filterFileList;
   },
 };

@@ -93,6 +93,14 @@ const grabDraft = async function () {
       grabLoading.value = false;
     });
   grabLoading.value = false;
+  // res.forEach((item) => {
+  //   const sendData = {
+  //     msg: "send_download",
+  //     fileUrl: item.fileUrl,
+  //     fileName: item.fileName,
+  //   };
+  //   chrome.runtime.sendMessage(sendData);
+  // });
   return res;
 };
 
