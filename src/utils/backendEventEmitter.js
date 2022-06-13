@@ -1,4 +1,4 @@
-export default class EventEmitter {
+export default class BackendEventEmitter {
   constructor() {
     this.eventList = [];
   }
@@ -16,3 +16,5 @@ export default class EventEmitter {
     return Promise.all(fnList.map((fn) => fn(args)));
   }
 }
+
+// const fns = [() => 1,  () => 2]

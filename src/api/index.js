@@ -8,6 +8,7 @@
  */
 import axios from "axios";
 
+console.log("Api Init");
 export default class Api {
   static BASE_URL = `https://api.fanbox.cc`;
 
@@ -63,8 +64,9 @@ export default class Api {
       params: this.assembleParams({ creatorId }),
     });
   }
+
   static async getPost(postId) {
-    const url = `${this.BASE_URL}/post.info?postId=${postId}`
-    return this.request.get(url)
+    const url = `${this.BASE_URL}/post.info?postId=${postId}`;
+    return this.request.get(url);
   }
 }

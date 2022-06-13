@@ -21,6 +21,27 @@ class PopupSender {
       currentWindow: true,
     });
   }
+
+  async sendTabMsg({ event, args, callback }) {
+    const currentTab = await this.currentTab;
+    const eventBody = { event, args: args || {} };
+    return new Promise((resolve) => {
+      chrome.tabs.sendMessage(currentTab[0].id, eventBody, (res) => {
+        callback && callback();
+        resolve(res);
+      });
+    });
+  }
+
+  static sendRunTimeMsg({ event, args, callback }) {
+    const eventBody = { event, args: args || {} };
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(eventBody, (res) => {
+        callback && callback();
+        resolve(res);
+      });
+    });
+  }
   // async sendMsgToCurrentTab({ event, msg, callback }) {
   //   await this.getCurrentTab();
   //   let { id } = this.currentTab[0];

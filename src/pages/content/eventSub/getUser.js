@@ -14,4 +14,5 @@ export default {
     await _getUser.getUserPlanList(args);
     return _getUser.planList;
   },
+  getCookie: () => document.cookie,
 };

@@ -92,6 +92,15 @@ const grabDraft = async function () {
     .catch(() => {
       grabLoading.value = false;
     });
+  console.log(`popupRes`, res);
+  await PopupSender.sendRunTimeMsg({
+    event: "filterFileListPush",
+    args: { list: res },
+    // callback: () => {
+    //   chrome.runtime.openOptionsPage();
+    // },
+  });
+  chrome.runtime.openOptionsPage();
   grabLoading.value = false;
   // res.forEach((item) => {
   //   const sendData = {

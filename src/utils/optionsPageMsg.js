@@ -1,12 +1,10 @@
 import EventEmitter from "./eventEmitter.js";
 
-const contentListener = new EventEmitter();
+const optionsPageMsg = new EventEmitter();
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const { event, args } = request;
-  console.log(`content_request`, request);
-
-  contentListener.emit(event, args).then((res) => {
+  optionsPageMsg.emit(event, ...args).then((res) => {
     sendResponse(res);
   });
   return true;
@@ -15,9 +13,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (request) => {
     const { event, args } = request;
-    const res = await contentListener.emit(event, args);
+    const res = await optionsPageMsg.emit(event, args);
     port.postMessage(res);
   });
 });
 
-export default contentListener;
+export default optionsPageMsg;

@@ -23,6 +23,8 @@ import {
   ElDropdown,
   ElDropdownMenu,
   ElDropdownItem,
+  ElImage,
+  ElTag,
 } from "element-plus";
 // import { ElFormItem } from "element-plus";
 // import { ElCheckboxGroup } from "element-plus";
@@ -53,6 +55,8 @@ import "element-plus/es/components/dropdown-item/style/css";
 import "element-plus/es/components/input/style/css";
 import "element-plus/es/components/loading/style/css";
 import "element-plus/es/components/icon/style/css";
+import "element-plus/es/components/image/style/css";
+import "element-plus/es/components/tag/style/css";
 
 export default {
   ElForm,
@@ -71,4 +75,6 @@ export default {
   ElInput,
   ElIcon,
   ElLoading,
+  ElImage,
+  ElTag,
 };
