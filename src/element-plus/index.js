@@ -25,6 +25,7 @@ import {
   ElDropdownItem,
   ElImage,
   ElTag,
+  ElProgress,
 } from "element-plus";
 // import { ElFormItem } from "element-plus";
 // import { ElCheckboxGroup } from "element-plus";
@@ -57,6 +58,7 @@ import "element-plus/es/components/loading/style/css";
 import "element-plus/es/components/icon/style/css";
 import "element-plus/es/components/image/style/css";
 import "element-plus/es/components/tag/style/css";
+import "element-plus/es/components/progress/style/css";
 
 export default {
   ElForm,
@@ -77,4 +79,5 @@ export default {
   ElLoading,
   ElImage,
   ElTag,
+  ElProgress,
 };

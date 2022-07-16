@@ -25,8 +25,8 @@
         <el-form-item>
           <el-button
             v-loading="grabLoading"
-            type="primary"
             :disabled="grabLoading"
+            type="primary"
             @click="grabDraft"
             ><span>抓取</span></el-button
           >
@@ -57,8 +57,8 @@ const exComponents = {
   exFolderNameDrop,
 };
 const mainPanelForm = ref({
-  fileTypeCheckList: [],
-  price: Array(2),
+  fileTypeCheckList: [".jpg.png.jpeg", ".zip"],
+  price: { isInput: false, val: Array(2) },
   date: "",
   nameRule: "",
 });
@@ -66,60 +66,54 @@ const grabLoading = ref(false);
 
 const getUserPlanList = async function () {
   const _popupSender = new PopupSender();
-  const [res] = await _popupSender.connectToCurrentTab({
-    event: "getUserPlanList",
-  });
+  // 请求content返回当前页面作者赞助列表
+  const [res] = await _popupSender.sendTabMsg({ event: "getUserPlanList" });
   const topPrice = res.find((item) => item.paymentMethod)?.fee;
-  mainPanelForm.value.price = [0, topPrice || 0];
+  mainPanelForm.value.price = {
+    isInput: mainPanelForm.value.price.isInput,
+    val: [0, topPrice || 0],
+  };
 };
 
 const grabDraft = async function () {
   const _popupSender = new PopupSender();
   const filterParams = {
     ...mainPanelForm.value,
-    price: mainPanelForm.value.price.some((item) => item)
-      ? mainPanelForm.value.price
+    price: mainPanelForm.value.price.isInput
+      ? mainPanelForm.value.price.val
       : false,
   };
   grabLoading.value = true;
-  const res = await _popupSender
-    .connectToCurrentTab({
-      event: "grabDraftByUser",
-      args: {
-        filterParams,
-      },
-    })
-    .catch(() => {
-      grabLoading.value = false;
-    });
-  console.log(`popupRes`, res);
+  // 请求content返回范围内的文件
+  const res = await _popupSender.sendTabMsg({
+    event: "grabDraftByUser",
+    args: {
+      filterParams,
+    },
+  });
+  // 向background发送抓取文件
   await PopupSender.sendRunTimeMsg({
     event: "filterFileListPush",
-    args: { list: res },
-    // callback: () => {
-    //   chrome.runtime.openOptionsPage();
-    // },
+    args: { list: res, mainPanelForm: mainPanelForm.value },
   });
   chrome.runtime.openOptionsPage();
   grabLoading.value = false;
-  // res.forEach((item) => {
-  //   const sendData = {
-  //     msg: "send_download",
-  //     fileUrl: item.fileUrl,
-  //     fileName: item.fileName,
-  //   };
-  //   chrome.runtime.sendMessage(sendData);
-  // });
-  return res;
 };
 
-getUserPlanList();
+const init = async function () {
+  getUserPlanList();
+  const [_mainPanelForm] = await PopupSender.sendRunTimeMsg({
+    event: "popupInit",
+  });
+  mainPanelForm.value = { ...mainPanelForm.value, ..._mainPanelForm };
+};
+init();
 </script>
 
 <style lang="scss" scoped>
 .pixiv-main-panel {
   width: 660px;
-  height: 500px;
+  height: 400px;
   padding: 20px;
 
   ::v-deep {

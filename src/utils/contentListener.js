@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (request) => {
     const { event, args } = request;
-    const res = await contentListener.emit(event, args);
+    const res = await contentListener.emit(event, args, port);
     port.postMessage(res);
   });
 });

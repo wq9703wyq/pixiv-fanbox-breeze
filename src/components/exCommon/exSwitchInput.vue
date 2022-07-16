@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="ex-swtich-input">
-    <el-switch v-model="isInput" size="small" />
+    <el-switch v-model="isInput" size="small" @change="updateModelVal" />
     <el-input-number
       v-for="(item, index) in num"
       v-show="isInput"
@@ -17,7 +17,7 @@
       class="ex-swtich-input__number"
       :controls="false"
       unit="¥"
-      @input="$emit('update:modelValue', [...num])"
+      @input="updateModelVal"
     />
   </div>
 </template>
@@ -27,21 +27,28 @@ import { ref, watch } from "vue";
 
 const props = defineProps({
   modelValue: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: () => ({
+      isInput: false,
+      val: [],
+    }),
   },
 });
 
 const $emit = defineEmits(["update:modelValue"]);
 
-const num = ref(...props.modelValue);
-const isInput = ref(false);
+const num = ref(props.modelValue.val);
+const isInput = ref(props.modelValue.isInput);
 watch(
   () => props.modelValue,
   (val) => {
-    num.value = [...val];
+    num.value = [...val.val];
+    isInput.value = val.isInput;
   }
 );
+const updateModelVal = function () {
+  $emit("update:modelValue", { isInput: isInput.value, val: [...num.value] });
+};
 </script>
 
 <style lang="scss" scoped>

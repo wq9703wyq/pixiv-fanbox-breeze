@@ -11,13 +11,6 @@ import Api from "/@api/index.js";
 import { store } from "./Store";
 
 export default class GrabDraftBase {
-  // constructor({ filterParams }) {
-  // this._filter = new Filter(filterParams)
-  // }
-
-  // 实例化筛选器
-  // _filter = {};
-
   // 投稿列表
   draftList = [];
 
@@ -33,27 +26,22 @@ export default class GrabDraftBase {
 
   async afterFetchDraftList() {
     if (this.nextUrl) {
-      await this.grabDraftList();
+      const regExp = /https:\/\/api.fanbox.cc\/post.listCreator\?(.*)/;
+      const paramsUri = this.nextUrl.match(regExp)[1];
+      await this.grabDraftList({ apiParams: { paramsUri } });
+    } else {
+      const filter = new Filter(store.form);
+      this.filterDraftList = this.draftList.filter((item) =>
+        filter.check(item)
+      );
+      await this.checkEachDraft();
     }
-    const filter = new Filter(store.form);
-    this.filterDraftList = this.draftList.filter((item) => filter.check(item));
-    await this.checkEachDraft();
-    // chrome.runtime.sendMessage({event: 'filterFileListPush', args: {list: this.filterFileList}})
-    // this.filterFileList.forEach(item => {
-    //   const sendData = {
-    //     msg: 'send_download',
-    //     fileUrl: item.fileUrl,
-    //     fileName: item.fileName,
-    //   }
-    //   chrome.runtime.sendMessage(sendData)
-    // })
   }
 
   async checkEachDraft() {
     const res = await Promise.all(
       this.filterDraftList.map(({ id }) => Api.getPost(id))
     );
-    // this.checkDraftBody({ draft: res.body, form })
     res.forEach((item) => this.checkDraftBody(item.body));
   }
 

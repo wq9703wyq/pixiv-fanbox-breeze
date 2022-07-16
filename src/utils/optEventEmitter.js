@@ -1,4 +1,4 @@
-export default class BackendEventEmitter {
+export default class OptEventEmitter {
   constructor() {
     this.eventList = [];
   }
@@ -8,11 +8,11 @@ export default class BackendEventEmitter {
       this.eventList[event].push(callback);
   }
 
-  emit(event, args, port, sender) {
+  emit(event, args, port) {
     const fnList = this.eventList[event] || [];
     if (!fnList.length) {
       return false;
     }
-    return Promise.all(fnList.map((fn) => fn(args, port, sender)));
+    return Promise.all(fnList.map((fn) => fn(args, port)));
   }
 }

@@ -38,7 +38,7 @@ export default class Api {
   }
 
   static getUserId(url) {
-    const regExp = /https:\/\/www.fanbox.cc\/@(\w*)/;
+    const regExp = /https:\/\/www.fanbox.cc\/@(.*)/;
     const userId = url.match(regExp)[1];
     return userId;
   }
@@ -48,15 +48,19 @@ export default class Api {
     limit = 300,
     maxPublishedDatetime = "",
     maxId = "",
+    paramsUri = "",
   }) {
-    return this.request.get(`${this.BASE_URL}/post.listCreator`, {
-      params: this.assembleParams({
-        creatorId,
-        limit,
-        maxPublishedDatetime,
-        maxId,
-      }),
-    });
+    return this.request.get(
+      `${this.BASE_URL}/post.listCreator${paramsUri ? `?${paramsUri}` : ""}`,
+      {
+        params: this.assembleParams({
+          creatorId,
+          limit,
+          maxPublishedDatetime,
+          maxId,
+        }),
+      }
+    );
   }
 
   static getUserPlanList({ creatorId }) {

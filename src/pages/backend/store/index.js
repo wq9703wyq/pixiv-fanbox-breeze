@@ -1,7 +1,9 @@
 class Store {
-  filterFileList = [];
+  filterFileList = new Map();
 
-  cookie = "";
+  mainPanelForm = {};
+
+  optViewId = "";
 }
 const sotre = new Store();
 export default sotre;

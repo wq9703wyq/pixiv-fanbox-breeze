@@ -11,18 +11,16 @@ import GrabDraftBase from "./GrabDraftBase";
 import { store } from "./Store";
 
 class GrabDraftUser extends GrabDraftBase {
-  // constructor({ filterParams }) {
-  //     super({ filterParams })
-  // }
   user = {};
 
-  async grabDraftList({ apiParams, filterParams }) {
+  async grabDraftList(params) {
+    const { apiParams, filterParams } = params;
     const creatorId = Api.getUserId(location.href);
-    store.setFilter(filterParams);
+    filterParams && store.setFilter(filterParams);
     const { body } = await Api.getPostListByUser(apiParams || { creatorId });
     this.nextUrl = body?.nextUrl;
     this.draftList.push(...body.items);
-    await this.afterFetchDraftList(filterParams);
+    await this.afterFetchDraftList();
     const { userId, userName, userIcon } = [...this.filterFileList].pop() || {};
     this.user = { userId, userName, userIcon };
     return { ...this.user, filterFileList: this.filterFileList };

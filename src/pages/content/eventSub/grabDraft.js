@@ -15,7 +15,5 @@ export default {
     });
     const res = await _grabDraftUser.grabDraftList(args);
     return res;
-    // return _grabDraftUser.filterDraftList;
-    // return _grabDraftUser.filterFileList;
   },
 };
