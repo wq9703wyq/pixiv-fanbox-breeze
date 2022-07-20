@@ -32,6 +32,7 @@
           >
         </el-form-item>
       </el-from>
+      <exDatePickView></exDatePickView>
     </div>
     <div class="pixiv-main-panel-lists"></div>
     <div class="pixiv-main-panel-foot"></div>
@@ -46,6 +47,7 @@ import exCheckBoxGroup from "/@exCom/exCheckBoxGroup.vue";
 import exSwitchInput from "/@exCom/exSwitchInput.vue";
 import exNameRuleInput from "/@exCom/exNameRuleInput.vue";
 import exFolderNameDrop from "/@exCom/exFolderNameDrop.vue";
+import exDatePickView from "/@exCom/exDatePickView.vue";
 import { ref } from "vue";
 import PopupSender from "/@/utils/popupSender";
 
