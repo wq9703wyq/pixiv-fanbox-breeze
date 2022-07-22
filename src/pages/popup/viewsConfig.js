@@ -2,11 +2,8 @@ export const mainPanelForm = [
   {
     label: "时间范围",
     prop: "date",
-    component: "ElDatePicker",
-    attrs: {
-      type: "daterange",
-      "value-format": "YYYY-MM-DD HH:mm:ss",
-    },
+    // component: "ElDatePicker",
+    component: "exDateRangePick",
   },
   {
     label: "文件类型",

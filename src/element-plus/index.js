@@ -7,6 +7,7 @@
  * @LastEditTime: 2022-06-06 00:51:57
  */
 import {
+  ElDrawer,
   ElForm,
   ElIcon,
   ElLoading,
@@ -59,8 +60,10 @@ import "element-plus/es/components/icon/style/css";
 import "element-plus/es/components/image/style/css";
 import "element-plus/es/components/tag/style/css";
 import "element-plus/es/components/progress/style/css";
+import "element-plus/es/components/drawer/style/css";
 
 export default {
+  ElDrawer,
   ElForm,
   ElButton,
   ElFormItem,

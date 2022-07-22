@@ -7,7 +7,7 @@
  * @LastEditTime: 2022-06-06 00:00:02
 -->
 <template>
-  <div class="pixiv-main-panel">
+  <div class="pixiv-main-panel" :class="{ isPanelExpand: panelExpand }">
     <div class="pixiv-main-panel-form">
       <el-from v-model="mainPanelForm" label-width="120">
         <el-form-item
@@ -20,6 +20,8 @@
             :is="exComponents[item.component]"
             v-model="mainPanelForm[item.prop]"
             v-bind="item.attrs"
+            @open="datePickOpen"
+            @close="datePickCloase"
           />
         </el-form-item>
         <el-form-item>
@@ -32,7 +34,7 @@
           >
         </el-form-item>
       </el-from>
-      <exDatePickView></exDatePickView>
+      <!-- <exDateRangeView v-model="testDate" @panelChange="panelChange"></exDateRangeView> -->
     </div>
     <div class="pixiv-main-panel-lists"></div>
     <div class="pixiv-main-panel-foot"></div>
@@ -41,13 +43,12 @@
 
 <script setup>
 import { mainPanelForm as mainPanelFormConfig } from "/@pages/popup/viewsConfig";
-
 import { ElDatePicker } from "element-plus";
 import exCheckBoxGroup from "/@exCom/exCheckBoxGroup.vue";
 import exSwitchInput from "/@exCom/exSwitchInput.vue";
 import exNameRuleInput from "/@exCom/exNameRuleInput.vue";
 import exFolderNameDrop from "/@exCom/exFolderNameDrop.vue";
-import exDatePickView from "/@exCom/exDatePickView.vue";
+import exDateRangePick from "/@exCom/exDateRangePick.vue";
 import { ref } from "vue";
 import PopupSender from "/@/utils/popupSender";
 
@@ -57,6 +58,7 @@ const exComponents = {
   exSwitchInput,
   exNameRuleInput,
   exFolderNameDrop,
+  exDateRangePick,
 };
 const mainPanelForm = ref({
   fileTypeCheckList: [".jpg.png.jpeg", ".zip"],
@@ -65,6 +67,15 @@ const mainPanelForm = ref({
   nameRule: "",
 });
 const grabLoading = ref(false);
+const panelExpand = ref(false);
+
+const datePickOpen = () => {
+  panelExpand.value = true;
+};
+
+const datePickCloase = () => {
+  panelExpand.value = false;
+};
 
 const getUserPlanList = async function () {
   const _popupSender = new PopupSender();
@@ -115,8 +126,11 @@ init();
 <style lang="scss" scoped>
 .pixiv-main-panel {
   width: 660px;
-  height: 400px;
   padding: 20px;
+
+  &.isPanelExpand {
+    height: 300px;
+  }
 
   ::v-deep {
     .el-form {
