@@ -2,39 +2,32 @@
   <div class="ex-date-range-view">
     <exDatePickView
       v-bind="$attrs"
-      v-model="activeDays"
+      :model-value="modelValue"
       class="ex-date-range-view__left"
+      @update:model-value="(val) => $emits('update:modelValue', val)"
     ></exDatePickView>
     <exDatePickView
       v-bind="$attrs"
-      v-model="activeDays"
+      :model-value="modelValue"
       :range-belong="false"
       class="ex-date-range-view__right"
+      @update:model-value="(val) => $emits('update:modelValue', val)"
     ></exDatePickView>
   </div>
 </template>
 
 <script setup>
-import { ref, useAttrs, watch } from "vue";
+import { useAttrs } from "vue";
 import exDatePickView from "./exDatePickView.vue";
 
 const $attrs = useAttrs();
-const $props = defineProps({
+defineProps({
   modelValue: {
     type: Array,
     default: () => [],
   },
 });
 const $emits = defineEmits(["update:modelValue"]);
-
-const activeDays = ref([...$props.modelValue]);
-
-watch(
-  () => activeDays.value,
-  (value) => {
-    $emits("update:modelValue", value);
-  }
-);
 </script>
 
 <style lang="scss" scoped>

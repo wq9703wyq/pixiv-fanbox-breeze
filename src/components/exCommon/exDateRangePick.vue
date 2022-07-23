@@ -4,7 +4,8 @@
       class="ex-date-range-pick__button"
       :icon="Calendar"
       @click="isOpen = !isOpen"
-    ></el-button>
+      >{{ selectedDate }}</el-button
+    >
     <el-drawer
       ref="drawerInstance"
       v-model="isOpen"
@@ -23,16 +24,20 @@
           >
         </div>
       </template>
-      <exDateRangeView v-bind="$attrs"></exDateRangeView>
+      <exDateRangeView
+        :model-value="modelValue"
+        v-bind="$attrs"
+        @update:model-value="updateValue"
+      ></exDateRangeView>
     </el-drawer>
   </div>
 </template>
 <script setup>
-import { ref, useAttrs, provide, watch } from "vue";
+import { ref, useAttrs, computed } from "vue";
 import { Calendar, ArrowLeft } from "@element-plus/icons-vue";
 import exDateRangeView from "/@exCom/exDateRangeView.vue";
 
-defineProps({
+const $props = defineProps({
   modelValue: {
     type: Array,
     default: () => [],
@@ -41,17 +46,22 @@ defineProps({
 const $emits = defineEmits(["update:modelValue"]);
 const $attrs = useAttrs();
 const drawerInstance = ref(null);
-const activeDays = ref([]);
 const isOpen = ref(false);
 
-provide("activeDays", activeDays);
-
-watch(
-  () => activeDays.value,
-  (val) => {
-    $emits("update:modelValue", val);
-  }
+const selectedDate = computed(() =>
+  $props.modelValue?.length
+    ? $props.modelValue[0] === $props.modelValue[1]
+      ? `${$props.modelValue[0]}`
+      : `${$props.modelValue[0]}  ~  ${$props.modelValue[1]}`
+    : "选择日期"
 );
+
+const updateValue = (val) => {
+  if (val.length === 2) {
+    drawerInstance.value.handleClose();
+  }
+  $emits("update:modelValue", val);
+};
 </script>
 <style lang="scss" scoped>
 .ex-date-range-pick {

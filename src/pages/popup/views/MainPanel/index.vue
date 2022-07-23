@@ -34,7 +34,6 @@
           >
         </el-form-item>
       </el-from>
-      <!-- <exDateRangeView v-model="testDate" @panelChange="panelChange"></exDateRangeView> -->
     </div>
     <div class="pixiv-main-panel-lists"></div>
     <div class="pixiv-main-panel-foot"></div>
@@ -63,7 +62,7 @@ const exComponents = {
 const mainPanelForm = ref({
   fileTypeCheckList: [".jpg.png.jpeg", ".zip"],
   price: { isInput: false, val: Array(2) },
-  date: "",
+  date: [],
   nameRule: "",
 });
 const grabLoading = ref(false);

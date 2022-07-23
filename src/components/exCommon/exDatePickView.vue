@@ -74,7 +74,7 @@
   </div>
 </template>
 <script setup>
-import { ref, computed, watch, inject } from "vue";
+import { ref, computed, watch } from "vue";
 import dayjs from "dayjs";
 import {
   ArrowLeft,
@@ -98,7 +98,6 @@ const curYear = ref("");
 const curMonth = ref("");
 const daysInCurMonthArr = ref([]);
 const activeDays = ref([]);
-const topActiveDays = inject("activeDays");
 const preEnd = ref();
 const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const emptyDay = ref([]);
@@ -133,7 +132,6 @@ const choiceActiveDate = (date) => {
   } else {
     activeDays.value = [date];
   }
-  topActiveDays.value = [...activeDays.value];
   $emits("update:modelValue", activeDays.value);
   $emits("change", date);
 };
@@ -174,7 +172,9 @@ const monthDayInit = () => {
   ).daysInMonth();
   while (daysInCurMonth) {
     daysInCurMonthArr.value.unshift(
-      `${curYear.value}-${curMonth.value}-${daysInCurMonth}`
+      `${curYear.value}-${curMonth.value}-${
+        daysInCurMonth < 10 ? "0" : ""
+      }${daysInCurMonth}`
     );
     daysInCurMonth -= 1;
   }
