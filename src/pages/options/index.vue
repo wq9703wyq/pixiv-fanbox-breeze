@@ -46,14 +46,7 @@
               class="pixiv-group-card__img-group-item__list-img"
               :url="img.thumbnailUrl"
               :status="imgStatusComputed(img)"
-              @load="
-                _viewScrollLoad.saveScrollHeight(
-                  $event,
-                  imgCard.id,
-                  imgIndex,
-                  draftIndex
-                )
-              "
+              @load="imgSingleLoaded($event, imgCard.id, imgIndex, draftIndex)"
             />
           </div>
         </div>
@@ -147,8 +140,6 @@ const draftListInit = () => {
           })
         );
       });
-      console.log(`optionsRec`, res);
-      console.log(`checkList`, checkList.value);
     },
   });
 };
@@ -202,10 +193,14 @@ const imgStatusComputed = (img) => {
   if (_useDownload.finishList.includes(thumbnailUrl)) {
     status = "success";
   } else if (downLoading.value) {
-    console.log(downLoadStatus.value);
     status = downLoadStatus.value === "resume" ? "pause" : "downloading";
   }
   return status;
+};
+
+const imgSingleLoaded = ($event, draftId, imgIndex, draftIndex) => {
+  _viewScrollLoad.saveScrollHeight($event, draftId, imgIndex, draftIndex);
+  // _viewScrollLoad.draftLoaded(draftId);
 };
 
 onMounted(() => {
@@ -246,8 +241,6 @@ onMounted(() => {
         flex-direction: column;
         border: 2px solid var(--border-secondary);
         margin-bottom: 20px;
-        // align-items: center;
-        // flex-wrap: wrap;
         &__info {
           position: relative;
           display: flex;
@@ -289,10 +282,16 @@ onMounted(() => {
           flex-direction: row;
           align-items: center;
           flex-wrap: wrap;
-          &-img {
+          &-img,
+          &-skeleton {
             width: 200px;
             min-height: 100px;
             margin: 10px;
+          }
+
+          &-skeleton-single {
+            width: 200px;
+            height: 100px;
           }
         }
       }

@@ -4,7 +4,18 @@
     :class="selectedStatus"
     @click="$emit('update:modelValue', !modelValue)"
   >
-    <el-image v-if="isStandUp" v-bind="$attrs" :src="url" fit="contain" />
+    <el-skeleton :loading="isSkeleton" class="ex-img__skeleton" animated>
+      <template #template>
+        <el-skeleton-item class="ex-img__skeleton-single" variant="image" />
+      </template>
+    </el-skeleton>
+    <el-image
+      v-if="isStandUp"
+      v-bind="$attrs"
+      :src="url"
+      fit="contain"
+      @load="imgLoaded"
+    />
     <div v-show="status" class="ex-img-mask" :class="selectedStatus">
       <el-icon v-show="status === 'success'"><Check /></el-icon>
       <el-icon v-show="status === 'error'"><Close /></el-icon>
@@ -21,7 +32,7 @@
 </template>
 
 <script setup>
-import { computed, useAttrs } from "vue";
+import { computed, useAttrs, ref } from "vue";
 
 const prop = defineProps({
   url: String,
@@ -29,8 +40,14 @@ const prop = defineProps({
   status: String,
   isStandUp: Boolean,
 });
-const $emit = defineEmits(["update:modelValue"]);
+const $emit = defineEmits(["update:modelValue", "load"]);
 const $attrs = useAttrs();
+const isSkeleton = ref(true);
+
+const imgLoaded = ($events) => {
+  $emit("load", $events);
+  isSkeleton.value = false;
+};
 
 const selectedStatus = computed(() => {
   if (!prop.statu) {
@@ -49,6 +66,15 @@ const selectedStatus = computed(() => {
 .ex-img {
   position: relative;
   cursor: pointer;
+
+  &__skeleton {
+    position: absolute;
+    height: 100%;
+
+    &-single {
+      height: 100%;
+    }
+  }
   .el-image {
     overflow: unset;
   }

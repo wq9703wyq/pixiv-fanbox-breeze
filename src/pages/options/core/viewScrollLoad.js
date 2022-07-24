@@ -62,18 +62,27 @@ export default class ViewScrollLoad {
           index += 1;
         }
       });
+      if (!this.standUpNodeList.value.length) {
+        this.pageInit();
+      }
     });
   }
 
   scrollLoad() {
-    const { scrollTop } = document.documentElement;
+    const { scrollTop, clientHeight } = document.documentElement;
     const nowDisplay = this.scrollLoadList.find(
-      (item) => scrollTop >= item.top && scrollTop <= item.end
+      (item) =>
+        scrollTop + clientHeight >= item.top &&
+        scrollTop + clientHeight <= item.end
     );
     if (nowDisplay) {
       this.standUpNodeList.value = [
         ...new Set([...this.standUpNodeList.value, ...nowDisplay.nodeList]),
       ];
     }
+  }
+
+  pageInit() {
+    this.standUpNodeList.value = [...(this.scrollLoadList[0]?.nodeList || [])];
   }
 }

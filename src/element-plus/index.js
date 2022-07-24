@@ -7,6 +7,8 @@
  * @LastEditTime: 2022-06-06 00:51:57
  */
 import {
+  ElSkeleton,
+  ElSkeletonItem,
   ElDrawer,
   ElForm,
   ElIcon,
@@ -61,6 +63,8 @@ import "element-plus/es/components/image/style/css";
 import "element-plus/es/components/tag/style/css";
 import "element-plus/es/components/progress/style/css";
 import "element-plus/es/components/drawer/style/css";
+import "element-plus/es/components/skeleton/style/css";
+import "element-plus/es/components/skeleton-item/style/css";
 
 export default {
   ElDrawer,
@@ -83,4 +87,6 @@ export default {
   ElImage,
   ElTag,
   ElProgress,
+  ElSkeleton,
+  ElSkeletonItem,
 };
