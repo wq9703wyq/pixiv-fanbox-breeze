@@ -60,7 +60,7 @@ const exComponents = {
   exDateRangePick,
 };
 const mainPanelForm = ref({
-  fileTypeCheckList: [".jpg.png.jpeg", ".zip"],
+  fileTypeCheckList: [".jpg.png.jpeg.gif", ".zip"],
   price: { isInput: false, val: Array(2) },
   date: [],
   nameRule: "",

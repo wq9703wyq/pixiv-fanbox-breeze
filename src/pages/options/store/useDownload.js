@@ -12,7 +12,7 @@ export default defineStore("useDownload", {
       this.downloadStatus.downloadStatus = res;
     },
     pushInFinishList(file) {
-      this.finishList.push(file?.file?.thumbnailUrl);
+      this.finishList.push(file?.file?.thumbnailUrl || file?.file?.fileUrl);
     },
   },
 });

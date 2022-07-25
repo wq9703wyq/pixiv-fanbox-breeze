@@ -8,7 +8,13 @@ export default class PathRename {
       ...img,
       fileName: `${this.#userName}/${this.#title}/${img.fileName}`,
     }));
-    return imageList;
+    const fileList = file.fileList.map((fileItem) => ({
+      ...fileItem,
+      fileName: `${this.#userName}/${this.#title}/${fileItem.fileName}.${
+        fileItem.extension
+      }`,
+    }));
+    return [...imageList, ...fileList];
   }
 
   setUser(draft) {

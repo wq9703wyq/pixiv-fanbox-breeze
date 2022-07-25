@@ -60,7 +60,7 @@ export default class GrabDraftBase {
     const imageList = [];
     const fileList = [];
     if (type === "article") {
-      body.block.forEach((block) => {
+      body.blocks.forEach((block) => {
         if (block.type === "image") {
           const imageData = body.imageMap[block.imageId];
           const resource = GrabDraftBase.saveImageData(

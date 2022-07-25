@@ -9,7 +9,7 @@ export const mainPanelForm = [
     label: "文件类型",
     prop: "fileTypeCheckList",
     component: "exCheckBoxGroup",
-    attrs: { options: [{ label: ".zip" }, { label: ".jpg.png.jpeg" }] },
+    attrs: { options: [{ label: ".zip" }, { label: ".jpg.png.jpeg.gif" }] },
   },
   {
     label: "价格范围",

@@ -19,35 +19,46 @@
           {{ item.userName }}
         </div>
       </div>
-      <div class="pixiv-group-card__img-group">
+      <div class="pixiv-group-card__draft-group">
         <div
-          v-for="(imgCard, imgIndex) in item.filterFileList"
-          :id="imgCard.id"
-          :key="imgCard.id"
-          class="pixiv-group-card__img-group-item"
+          v-for="(draftCard, imgIndex) in item.filterFileList"
+          :id="draftCard.id"
+          :key="draftCard.id"
+          class="pixiv-group-card__draft-group-item"
         >
-          <div class="pixiv-group-card__img-group-item__info">
-            <div class="pixiv-group-card__img-group-item__info-cover">
-              <el-image :src="imgCard.coverImageUrl" fit="cover" />
+          <div class="pixiv-group-card__draft-group-item__info">
+            <div class="pixiv-group-card__draft-group-item__info-cover">
+              <el-image :src="draftCard.coverImageUrl" fit="cover" />
             </div>
-            <div class="pixiv-group-card__img-group-item__info-title">
-              <span class="title-name">{{ imgCard.title }}</span>
-              <el-tag>¥ {{ imgCard.feeRequired }}</el-tag>
+            <div class="pixiv-group-card__draft-group-item__info-title">
+              <span class="title-name">{{ draftCard.title }}</span>
+              <el-tag>¥ {{ draftCard.feeRequired }}</el-tag>
             </div>
           </div>
-          <div class="pixiv-group-card__img-group-item__list">
+          <div class="pixiv-group-card__draft-group-item__list">
             <exImg
-              v-for="img in imgCard.imageList"
+              v-for="img in draftCard.imageList"
               :key="img.fileName"
               v-model="checkList[img.thumbnailUrl]"
               :is-stand-up="
-                _viewScrollLoad.standUpNodeList.value.includes(imgCard.id)
+                _viewScrollLoad.standUpNodeList.value.includes(draftCard.id)
               "
-              class="pixiv-group-card__img-group-item__list-img"
+              class="pixiv-group-card__draft-group-item__list-img"
               :url="img.thumbnailUrl"
-              :status="imgStatusComputed(img)"
-              @load="imgSingleLoaded($event, imgCard.id, imgIndex, draftIndex)"
+              :status="draftStatusComputed(img)"
+              @load="
+                imgSingleLoaded($event, draftCard.id, imgIndex, draftIndex)
+              "
             />
+            <exMaskFrame
+              v-for="file in draftCard.fileList"
+              :key="file.fileUrl"
+              v-model="checkList[file.fileUrl]"
+              :status="draftStatusComputed(file)"
+              class="pixiv-group-card__draft-group-item__list-file"
+            >
+              <p>{{ file.fileName }}.{{ file.extension }}</p>
+            </exMaskFrame>
           </div>
         </div>
       </div>
@@ -92,6 +103,7 @@ import downloadEvent from "./eventSub/downloadEvent";
 import draftListEvent from "./eventSub/pageInit";
 import ViewScrollLoad from "./core/viewScrollLoad";
 
+import exMaskFrame from "/@exCom/exMaskFrame.vue";
 import exImg from "/@exCom/exImg.vue";
 
 const checkList = ref({});
@@ -104,6 +116,16 @@ const _optPageSender = new OptionsPageSender({
 const _useDownload = useDownload();
 const _useFileView = useFileView();
 const _viewScrollLoad = new ViewScrollLoad();
+
+watch(
+  () => _useDownload.finishList,
+  (val) => {
+    if (val.length === Object.keys(checkList.value).length) {
+      downLoading.value = false;
+    }
+  },
+  { deep: true }
+);
 
 watch(
   () => _useFileView.draftList,
@@ -134,11 +156,14 @@ const draftListInit = () => {
       // draftList.value.push(..._draftList);
       _useFileView.replaceDraftList(_draftList);
       _draftList.forEach(({ filterFileList }) => {
-        (filterFileList || []).forEach(({ imageList }) =>
-          (imageList || []).forEach(({ thumbnailUrl }) => {
+        (filterFileList || []).forEach(({ imageList, fileList }) => {
+          [...imageList].forEach(({ thumbnailUrl }) => {
             Object.assign(checkList.value, { [thumbnailUrl]: true });
-          })
-        );
+          });
+          [...fileList].forEach(({ fileUrl }) => {
+            Object.assign(checkList.value, { [fileUrl]: true });
+          });
+        });
       });
     },
   });
@@ -147,16 +172,17 @@ draftListInit();
 
 const handleDownLoad = () => {
   downLoading.value = true;
+  _useDownload.finishList = [];
   const allFileList = [];
   const _pathRename = new PathRename();
-  _useFileView.draftList.value.forEach((item) => {
+  _useFileView.draftList.forEach((item) => {
     _pathRename.setUser(item);
     (item.filterFileList || []).forEach((draft) => {
       _pathRename.setTitle(draft);
       allFileList.push(
         ..._pathRename
           .folderRename(draft)
-          .filter((file) => checkList.value[file.thumbnailUrl])
+          .filter((file) => checkList.value[file.thumbnailUrl || file.fileUrl])
       );
     });
   });
@@ -187,10 +213,10 @@ const handlePause = () => {
   });
 };
 
-const imgStatusComputed = (img) => {
-  const { thumbnailUrl } = img;
+const draftStatusComputed = (draft) => {
+  const { thumbnailUrl, fileUrl } = draft;
   let status = "";
-  if (_useDownload.finishList.includes(thumbnailUrl)) {
+  if (_useDownload.finishList.includes(thumbnailUrl || fileUrl)) {
     status = "success";
   } else if (downLoading.value) {
     status = downLoadStatus.value === "resume" ? "pause" : "downloading";
@@ -233,7 +259,7 @@ onMounted(() => {
       }
     }
 
-    &__img-group {
+    &__draft-group {
       padding: 20px;
       background-color: var(--bg-secondary);
       &-item {
@@ -282,16 +308,15 @@ onMounted(() => {
           flex-direction: row;
           align-items: center;
           flex-wrap: wrap;
-          &-img,
-          &-skeleton {
+          &-img {
             width: 200px;
             min-height: 100px;
             margin: 10px;
           }
-
-          &-skeleton-single {
-            width: 200px;
-            height: 100px;
+          &-file {
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 800;
           }
         }
       }
