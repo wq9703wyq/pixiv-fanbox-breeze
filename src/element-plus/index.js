@@ -29,6 +29,7 @@ import {
   ElImage,
   ElTag,
   ElProgress,
+  ElMessage,
 } from "element-plus";
 // import { ElFormItem } from "element-plus";
 // import { ElCheckboxGroup } from "element-plus";
@@ -65,8 +66,10 @@ import "element-plus/es/components/progress/style/css";
 import "element-plus/es/components/drawer/style/css";
 import "element-plus/es/components/skeleton/style/css";
 import "element-plus/es/components/skeleton-item/style/css";
+import "element-plus/es/components/message/style/css";
 
 export default {
+  ElMessage,
   ElDrawer,
   ElForm,
   ElButton,

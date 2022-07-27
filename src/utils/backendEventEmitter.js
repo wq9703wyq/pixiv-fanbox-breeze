@@ -8,7 +8,7 @@ export default class BackendEventEmitter {
       this.eventList[event].push(callback);
   }
 
-  emit(event, args, port, sender) {
+  async emit(event, args, port, sender) {
     const fnList = this.eventList[event] || [];
     if (!fnList.length) {
       return false;

@@ -117,21 +117,6 @@ const _useDownload = useDownload();
 const _useFileView = useFileView();
 const _viewScrollLoad = new ViewScrollLoad();
 
-watch(
-  () => _useDownload.finishList,
-  (val) => {
-    if (val.length === Object.keys(checkList.value).length) {
-      downLoading.value = false;
-    }
-  },
-  { deep: true }
-);
-
-watch(
-  () => _useFileView.draftList,
-  (val) => _viewScrollLoad.draftPartition(val)
-);
-
 const btnStatus = computed(
   () =>
     ({
@@ -148,23 +133,27 @@ const btnStatus = computed(
     }[downLoadStatus.value])
 );
 
+const checkListInit = (_draftList) => {
+  checkList.value = {};
+  _useFileView.replaceDraftList(_draftList);
+  _draftList.forEach(({ filterFileList }) => {
+    (filterFileList || []).forEach(({ imageList, fileList }) => {
+      [...imageList].forEach(({ thumbnailUrl }) => {
+        Object.assign(checkList.value, { [thumbnailUrl]: true });
+      });
+      [...fileList].forEach(({ fileUrl }) => {
+        Object.assign(checkList.value, { [fileUrl]: true });
+      });
+    });
+  });
+};
+
 const draftListInit = () => {
   OptionsPageSender.sendRunTimeMsg({
-    event: "filtetFileListPop",
+    event: "backend_file_list_pop",
     callback: (res) => {
       const [_draftList] = res;
-      // draftList.value.push(..._draftList);
-      _useFileView.replaceDraftList(_draftList);
-      _draftList.forEach(({ filterFileList }) => {
-        (filterFileList || []).forEach(({ imageList, fileList }) => {
-          [...imageList].forEach(({ thumbnailUrl }) => {
-            Object.assign(checkList.value, { [thumbnailUrl]: true });
-          });
-          [...fileList].forEach(({ fileUrl }) => {
-            Object.assign(checkList.value, { [fileUrl]: true });
-          });
-        });
-      });
+      checkListInit(_draftList);
     },
   });
 };
@@ -232,6 +221,23 @@ const imgSingleLoaded = ($event, draftId, imgIndex, draftIndex) => {
 onMounted(() => {
   window.addEventListener("scroll", () => _viewScrollLoad.scrollLoad());
 });
+watch(
+  () => _useDownload.finishList,
+  (val) => {
+    if (val.length === Object.keys(checkList.value).length) {
+      downLoading.value = false;
+    }
+  },
+  { deep: true }
+);
+
+watch(
+  () => _useFileView.draftList,
+  (val) => {
+    checkListInit(val);
+    _viewScrollLoad.draftPartition(val);
+  }
+);
 </script>
 
 <style lang="scss" scoped>

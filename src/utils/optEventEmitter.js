@@ -8,7 +8,7 @@ export default class OptEventEmitter {
       this.eventList[event].push(callback);
   }
 
-  emit(event, args, port) {
+  async emit(event, args, port) {
     const fnList = this.eventList[event] || [];
     if (!fnList.length) {
       return false;

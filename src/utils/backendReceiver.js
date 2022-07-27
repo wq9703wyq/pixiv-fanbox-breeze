@@ -9,8 +9,7 @@ class BackendReceiver extends BackendEventEmitter {
       console.log(`backend_request`, request);
       console.log("backend_sender", sender);
       this.emit(event, args, null, sender).then((res) => {
-        console.log(`backend_emit_res`, res);
-        sendResponse(res);
+        res && sendResponse(res);
       });
       return true;
     });

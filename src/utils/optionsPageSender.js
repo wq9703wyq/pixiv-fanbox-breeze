@@ -7,8 +7,10 @@ class OptionsPageSender extends EventEmitter {
     console.log("opt_listener");
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const { event: _event, args: _args } = request;
+      console.log(`opt_request`, request);
+      console.log("opt_sender", sender);
       this.emit(_event, _args).then((res) => {
-        sendResponse(res);
+        res && sendResponse(res);
       });
       return true;
     });

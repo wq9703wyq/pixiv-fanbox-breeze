@@ -2,7 +2,7 @@ import _store from "../store/index";
 import backendReceiver from "/@/utils/backendReceiver";
 
 export default {
-  async filterFileListPush({ list }) {
+  async backend_file_list_push({ list }) {
     console.log(`list`, list);
 
     (list || []).forEach((item) => {
@@ -33,7 +33,7 @@ export default {
       }
     }
   },
-  filtetFileListPop(args, port, sender) {
+  backend_file_list_pop(args, port, sender) {
     _store.optViewId = sender.tab.id;
     const res = [];
     _store.filterFileList.forEach((value) => {

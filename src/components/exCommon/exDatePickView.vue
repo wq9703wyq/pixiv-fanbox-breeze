@@ -149,7 +149,10 @@ const dateInit = () => {
       if ($props.rangeBelong) {
         modelDate = !pre && aft ? dayjs(aft).subtract(1, "month") : dayjs(pre);
       } else {
-        modelDate = !aft && pre ? dayjs(pre).add(1, "month") : dayjs(aft);
+        modelDate =
+          (!aft && pre) || dayjs(pre).month() === dayjs(aft).month()
+            ? dayjs(pre).add(1, "month")
+            : dayjs(aft);
       }
       activeDays.value = [pre || "", aft || ""];
     }

@@ -9,7 +9,7 @@
 <template>
   <div class="pixiv-main-panel" :class="{ isPanelExpand: panelExpand }">
     <div class="pixiv-main-panel-form">
-      <el-from v-model="mainPanelForm" label-width="120">
+      <el-form v-model="mainPanelForm" label-width="120">
         <el-form-item
           v-for="item in mainPanelFormConfig"
           :key="item.prop"
@@ -33,7 +33,7 @@
             ><span>抓取</span></el-button
           >
         </el-form-item>
-      </el-from>
+      </el-form>
     </div>
     <div class="pixiv-main-panel-lists"></div>
     <div class="pixiv-main-panel-foot"></div>
@@ -42,7 +42,7 @@
 
 <script setup>
 import { mainPanelForm as mainPanelFormConfig } from "/@pages/popup/viewsConfig";
-import { ElDatePicker } from "element-plus";
+import { ElMessage } from "element-plus";
 import exCheckBoxGroup from "/@exCom/exCheckBoxGroup.vue";
 import exSwitchInput from "/@exCom/exSwitchInput.vue";
 import exNameRuleInput from "/@exCom/exNameRuleInput.vue";
@@ -52,7 +52,6 @@ import { ref } from "vue";
 import PopupSender from "/@/utils/popupSender";
 
 const exComponents = {
-  ElDatePicker,
   exCheckBoxGroup,
   exSwitchInput,
   exNameRuleInput,
@@ -103,19 +102,24 @@ const grabDraft = async function () {
       filterParams,
     },
   });
-  // 向background发送抓取文件
-  await PopupSender.sendRunTimeMsg({
-    event: "filterFileListPush",
-    args: { list: res, mainPanelForm: mainPanelForm.value },
-  });
-  chrome.runtime.openOptionsPage();
+  const [{ filterFileList }] = res;
+  if (filterFileList.length) {
+    // 向background发送抓取文件
+    await PopupSender.sendRunTimeMsg({
+      event: "backend_file_list_push",
+      args: { list: res, mainPanelForm: mainPanelForm.value },
+    });
+    chrome.runtime.openOptionsPage();
+  } else {
+    ElMessage.warning("符合条件筛选结果为 0");
+  }
   grabLoading.value = false;
 };
 
 const init = async function () {
   getUserPlanList();
   const [_mainPanelForm] = await PopupSender.sendRunTimeMsg({
-    event: "popupInit",
+    event: "popup_init",
   });
   mainPanelForm.value = { ...mainPanelForm.value, ..._mainPanelForm };
 };
@@ -124,7 +128,7 @@ init();
 
 <style lang="scss" scoped>
 .pixiv-main-panel {
-  width: 660px;
+  width: 640px;
   padding: 20px;
 
   &.isPanelExpand {

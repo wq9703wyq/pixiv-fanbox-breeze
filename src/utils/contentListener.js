@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log(`content_request`, request);
 
   contentListener.emit(event, args).then((res) => {
-    sendResponse(res);
+    res && sendResponse(res);
   });
   return true;
 });

@@ -25,6 +25,7 @@ class PopupSender {
     const eventBody = { event, args: args || {} };
     return new Promise((resolve) => {
       chrome.runtime.sendMessage(eventBody, (res) => {
+        console.log("popupMsg", res);
         callback && callback();
         resolve(res);
       });
