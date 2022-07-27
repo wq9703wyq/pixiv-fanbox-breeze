@@ -1,29 +1,54 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 鹿角兔子
+ * @Date: 2022-06-05 21:36:14
+ * @LastEditors: 鹿角兔子
+ * @LastEditTime: 2022-06-05 23:59:28
+-->
 <template>
   <div class="ex-swtich-input">
-    <el-switch v-model="isInput" size="small" />
+    <el-switch v-model="isInput" size="small" @change="updateModelVal" />
     <el-input-number
-      v-show="!isInput"
-      class="ex-swtich-input__number"
       v-for="(item, index) in num"
+      v-show="isInput"
       :key="index"
       v-model="num[index]"
+      class="ex-swtich-input__number"
       :controls="false"
       unit="¥"
+      @input="updateModelVal"
     />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+
 const props = defineProps({
   modelValue: {
-    type: Array,
-    default: () => [],
+    type: Object,
+    default: () => ({
+      isInput: false,
+      val: [],
+    }),
   },
 });
 
-let num = ref([...props.modelValue]);
-let isInput = ref(false);
+const $emit = defineEmits(["update:modelValue"]);
+
+const num = ref(props.modelValue.val);
+const isInput = ref(props.modelValue.isInput);
+watch(
+  () => props.modelValue,
+  (val) => {
+    num.value = [...val.val];
+    isInput.value = val.isInput;
+  }
+);
+const updateModelVal = function () {
+  $emit("update:modelValue", { isInput: isInput.value, val: [...num.value] });
+};
 </script>
 
 <style lang="scss" scoped>

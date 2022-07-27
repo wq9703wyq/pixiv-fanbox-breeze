@@ -58,6 +58,8 @@
   --orange: hsl(40deg 100% 50% / 100%);
   --purple: hsl(249deg 46% 54% / 100%);
   --opacity: hsl(0deg 0% 0% / 0%);
+  --mask-color: hsl(0deg 0% 0% / 40%);
+  --mask-color-1: hsl(0deg 0% 100% / 40%);
   --button-default-color: var(--primary-color);
   --button-default-click-color: var(--primary-color-6);
   --button-default-hover-color: var(--primary-color-8);
@@ -71,9 +73,7 @@
   --button-ghost-text-color: var(--primary-color);
   --button-ghost-text-disabled-color: var(--disable-text);
   --button-ghost-disabled-color: var(--disable-secondary);
-  --button-ghost-disabled-border-color: var(
-    --disable-primary
-  );
+  --button-ghost-disabled-border-color: var(--disable-primary);
   --button-ghost-text-hover-color: var(--primary-color);
   --button-group-color: var(--opacity);
   --button-group-hover-color: var(--primary-color-8);
@@ -82,9 +82,7 @@
   --select-text-color: var(--text-normal);
   --select-text-hover-color: var(--primary-color);
   --select-dropdown-bg-color: var(--bg-bg);
-  --select-dropdown-bg-hover-color: var(
-    --primary-color-2
-  );
+  --select-dropdown-bg-hover-color: var(--primary-color-2);
   --table-head-bg-color: var(--table-header);
   --table-primary-bg-color: var(--table-primary);
   --table-secondary-bg-color: var(--table-secondary);
@@ -130,9 +128,7 @@
   --sub-tabs-text-active-color: var(--white);
   --date-table-weekend-color: var(--primary-color-6);
   --date-table-current-text-color: var(--white);
-  --date-table-current-color: var(
-    --primary-color
-  );
+  --date-table-current-color: var(--primary-color);
   --date-table-bg: var(--bg-bg);
   --table-scroll-bg-color: var(--bg-header);
   --table-scroll-track-color: var(--grey);
@@ -146,4 +142,6 @@
   --icon-hover: var(--primary-color-8);
   --icon-click: var(--primary-color);
   --icon-disable: var(--primary-color-1);
+
+  margin: 0;
 }

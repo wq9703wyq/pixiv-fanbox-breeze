@@ -1,1 +1,1 @@
-console.log("background loaded")
+import "./evetSub/index";

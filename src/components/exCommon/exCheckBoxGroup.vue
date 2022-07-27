@@ -11,7 +11,8 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
+
 const props = defineProps({
   options: Object,
   modelValue: Array,
@@ -25,5 +26,5 @@ const innerSelected = computed({
 });
 </script>
 
-<style lang="scss" scoped>
-</style>
+<!-- <style lang="scss" scoped>
+</style> -->

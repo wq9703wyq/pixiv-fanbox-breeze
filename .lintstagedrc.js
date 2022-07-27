@@ -11,7 +11,8 @@ const micromatch = require('micromatch');
 const cli = new ESLint({});
 
 const eslint = async (files) =>
-  "npx eslint --fix --max-warnings=0 " +
+  // "npx eslint --fix --max-warnings=0 " +
+  "npx eslint --fix" +
   (await Promise.all(files.filter(async (file) => !await cli.isPathIgnored(file)))).join(" ");
 const stylelint = (files) => `npx stylelint --fix ${files.join(" ")}`;
 const prettier = (files) => `npx prettier --write ${files.join(" ")}`;

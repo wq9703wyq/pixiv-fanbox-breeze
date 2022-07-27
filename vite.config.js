@@ -3,9 +3,7 @@ import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
 import createManifest from './plugins/create-manifest';
 import mvContentStyle from './plugins/mv-content-style';
-// import AutoImport from 'unplugin-auto-import/vite';
-// import Components from 'unplugin-vue-components/vite';
-// import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
+// import legacy from '@vitejs/plugin-legacy'
 
 // https://vitejs.dev/config/
 const root = resolve(__dirname, 'src');
@@ -21,14 +19,11 @@ const apiDir = resolve(root, 'api')
 export default defineConfig({
   plugins: [
     vue(),
+    // legacy({
+    //   targets: ['defaults', 'not IE 11']
+    // }),
     createManifest(),
     mvContentStyle(),
-    // AutoImport({
-    //   resolvers: [ElementPlusResolver()],
-    // }),
-    // Components({
-    //   resolvers: [ElementPlusResolver()],
-    // }),
   ],
   resolve: {
     alias: [

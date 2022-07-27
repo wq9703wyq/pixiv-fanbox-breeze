@@ -2,15 +2,18 @@ env:
   browser: true
   es6: true
   node: true
+  vue/setup-compiler-macros: true
 extends:
   - airbnb-base
-  - plugin:vue/recommended
+  - plugin:vue/vue3-recommended
   - prettier
 globals:
-  gio: true
-parser: "@babel/eslint-parser"
+  chrome: true
+parser: vue-eslint-parser
 parserOptions:
+  parser: "@babel/eslint-parser"
   requireConfigFile: false
+  # sourceType: module
 rules:
   no-restricted-globals:
     - off
@@ -25,6 +28,8 @@ rules:
   no-multi-assign:
     - off
   no-throw-literal:
+    - off
+  no-underscore-dangle:
     - off
   no-param-reassign:
     - error
@@ -49,3 +54,7 @@ rules:
   complexity:
     - off
     - 11
+  vue/multi-word-component-names:
+    - off
+  class-methods-use-this:
+    - off
