@@ -163,11 +163,6 @@ const dateInit = () => {
   curMonth.value = modelDate.format("MM");
 };
 
-watch(
-  () => $props.modelValue,
-  () => dateInit()
-);
-
 const monthDayInit = () => {
   daysInCurMonthArr.value = [];
   let daysInCurMonth = dayjs(
@@ -194,12 +189,14 @@ const moveAfterDate = (type) => {
       .add(1, "month")
       .format("MM");
   }
-  $emits("panelChange", {
-    before,
-    dateType: type,
-    changeType: "moveAfter",
-    after: type === "year" ? curYear.value : curMonth.value,
-  });
+  if (!$props.rangeBelong) {
+    $emits("panelChange", {
+      before,
+      dateType: type,
+      changeType: "moveAfter",
+      after: type === "year" ? curYear.value : curMonth.value,
+    });
+  }
   monthDayInit();
 };
 
@@ -212,17 +209,29 @@ const moveBeforeDate = (type) => {
       .subtract(1, "month")
       .format("MM");
   }
-  $emits("panelChange", {
-    before,
-    dateType: type,
-    changeType: "moveBefore",
-    after: type === "year" ? curYear.value : curMonth.value,
-  });
+  if ($props.rangeBelong) {
+    $emits("panelChange", {
+      before,
+      dateType: type,
+      changeType: "moveBefore",
+      after: type === "year" ? curYear.value : curMonth.value,
+    });
+  }
   monthDayInit();
 };
 
 dateInit();
 monthDayInit();
+
+watch(
+  () => $props.modelValue,
+  () => dateInit()
+);
+
+defineExpose({
+  moveAfterDate,
+  moveBeforeDate,
+});
 </script>
 
 <style lang="scss" scoped>

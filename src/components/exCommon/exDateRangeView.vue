@@ -1,25 +1,31 @@
 <template>
   <div class="ex-date-range-view">
     <exDatePickView
+      ref="datePickBeforeIns"
       v-bind="$attrs"
       :model-value="modelValue"
       class="ex-date-range-view__left"
       @update:model-value="(val) => $emits('update:modelValue', val)"
+      @panel-change="panelChange"
     ></exDatePickView>
     <exDatePickView
+      ref="datePickAfterIns"
       v-bind="$attrs"
       :model-value="modelValue"
       :range-belong="false"
       class="ex-date-range-view__right"
       @update:model-value="(val) => $emits('update:modelValue', val)"
+      @panel-change="panelChange"
     ></exDatePickView>
   </div>
 </template>
 
 <script setup>
-import { useAttrs } from "vue";
+import { useAttrs, ref } from "vue";
 import exDatePickView from "./exDatePickView.vue";
 
+const datePickBeforeIns = ref();
+const datePickAfterIns = ref();
 const $attrs = useAttrs();
 defineProps({
   modelValue: {
@@ -27,7 +33,17 @@ defineProps({
     default: () => [],
   },
 });
-const $emits = defineEmits(["update:modelValue"]);
+const $emits = defineEmits(["update:modelValue", "panelChange"]);
+
+const panelChange = (events) => {
+  const { changeType, dateType } = events;
+  if (changeType === "moveAfter") {
+    datePickBeforeIns.value.moveAfterDate(dateType);
+  } else if (changeType === "moveBefore") {
+    datePickAfterIns.value.moveBeforeDate(dateType);
+  }
+  $emits("panelChange", events);
+};
 </script>
 
 <style lang="scss" scoped>

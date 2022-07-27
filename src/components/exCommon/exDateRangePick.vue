@@ -19,7 +19,7 @@
             type="text"
             class="ex-date-range-pick__drawer__header-button"
             :icon="ArrowLeft"
-            @click="drawerInstance.handleClose()"
+            @click="handleClose"
             >返回</el-button
           >
         </div>
@@ -61,6 +61,14 @@ const updateValue = (val) => {
     drawerInstance.value.handleClose();
   }
   $emits("update:modelValue", val);
+};
+
+const handleClose = () => {
+  if ($props.modelValue.length === 1) {
+    const [date] = $props.modelValue;
+    $emits("update:modelValue", [date, date]);
+  }
+  drawerInstance.value.handleClose();
 };
 </script>
 <style lang="scss" scoped>

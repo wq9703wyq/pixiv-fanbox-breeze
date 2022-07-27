@@ -6,6 +6,7 @@
  * @LastEditors: 鹿角兔子
  * @LastEditTime: 2022-06-05 22:31:48
  */
+
 export default class Filter {
   form = {};
 
@@ -54,9 +55,21 @@ export default class Filter {
       return true;
     }
     const { publishedDatetime } = item;
-    const nowDate = new Date(publishedDatetime).getTime();
+    const _publishedDatetime = new Date(publishedDatetime);
+    const year = _publishedDatetime.getFullYear();
+    const month =
+      _publishedDatetime.getMonth() + 1 >= 10
+        ? _publishedDatetime.getMonth() + 1
+        : `0${_publishedDatetime.getMonth() + 1}`;
+    const date =
+      _publishedDatetime.getDate() < 10
+        ? `0${_publishedDatetime.getDate()}`
+        : _publishedDatetime.getDate();
+    const publishedDate = `${year}-${month}-${date}`;
+    const nowDate = new Date(publishedDate).getTime();
     return (
-      nowDate >= new Date(startDate).getTime() && nowDate <= new Date(endDate)
+      nowDate >= new Date(startDate).getTime() &&
+      nowDate <= new Date(endDate).getTime()
     );
   }
 }
