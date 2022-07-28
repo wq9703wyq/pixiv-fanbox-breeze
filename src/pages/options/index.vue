@@ -95,7 +95,7 @@
 </template>
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
-import OptionsPageSender from "/@/utils/optionsPageSender";
+import optionsPageSender from "/@/utils/optionsPageSender";
 import PathRename from "./core/pathRename";
 import useDownload from "./store/useDownload";
 import useFileView from "./store/useFileView";
@@ -109,10 +109,10 @@ import exImg from "/@exCom/exImg.vue";
 const checkList = ref({});
 const downLoading = ref(false);
 const downLoadStatus = ref("pause");
-const _optPageSender = new OptionsPageSender({
+Object.entries({
   ...downloadEvent(),
   ...draftListEvent(),
-});
+}).forEach(([key, val]) => optionsPageSender.on(key, val));
 const _useDownload = useDownload();
 const _useFileView = useFileView();
 const _viewScrollLoad = new ViewScrollLoad();
@@ -149,7 +149,7 @@ const checkListInit = (_draftList) => {
 };
 
 const draftListInit = () => {
-  OptionsPageSender.sendRunTimeMsg({
+  optionsPageSender.sendRunTimeMsg({
     event: "backend_file_list_pop",
     callback: (res) => {
       const [_draftList] = res;
@@ -175,31 +175,21 @@ const handleDownLoad = () => {
       );
     });
   });
-  _optPageSender.connectToBackend({
-    event: "send_download",
-    args: {
-      fileList: [...allFileList],
-    },
-  });
+  optionsPageSender.emit("opt_handle_download", { allFileList });
 };
 
-const handleCancel = () => {
-  OptionsPageSender.sendRunTimeMsg({
-    event: "cancel_download",
-    callback: () => {
-      downLoading.value = false;
-    },
-  });
+const handleCancel = async () => {
+  await optionsPageSender.emit("opt_cancel_download");
+  downLoading.value = false;
 };
 
-const handlePause = () => {
-  OptionsPageSender.sendRunTimeMsg({
-    event:
-      downLoadStatus.value === "pause" ? "pause_download" : "resume_download",
-    callback: (status) => {
-      downLoadStatus.value = status[0].status || downLoadStatus.value;
-    },
-  });
+const handlePause = async () => {
+  const event =
+    downLoadStatus.value === "pause"
+      ? "opt_pause_download"
+      : "opt_resume_download";
+  const [status] = await optionsPageSender.emit(event);
+  downLoadStatus.value = status?.status || downLoadStatus.value;
 };
 
 const draftStatusComputed = (draft) => {

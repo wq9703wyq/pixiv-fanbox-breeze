@@ -11,8 +11,8 @@ export default defineStore("useDownload", {
     changeDownload(res) {
       this.downloadStatus.downloadStatus = res;
     },
-    pushInFinishList(file) {
-      this.finishList.push(file?.file?.thumbnailUrl || file?.file?.fileUrl);
+    pushInFinishList(draft) {
+      this.finishList.push(draft?.thumbnailUrl || draft?.fileUrl);
     },
   },
 });

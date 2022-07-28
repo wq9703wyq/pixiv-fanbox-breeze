@@ -18,7 +18,7 @@ class BackendReceiver extends BackendEventEmitter {
       console.log("backend_connent", port);
       port.onMessage.addListener(async (request) => {
         const { event, args } = request;
-        const res = await this.emit(event, args, port);
+        const res = await this.emit(event, args);
         port.postMessage(res);
       });
     });
