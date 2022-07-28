@@ -38,7 +38,7 @@ export default class Api {
   }
 
   static getUserId(url) {
-    const regExp = /https:\/\/www.fanbox.cc\/@(.*)/;
+    const regExp = /https:\/\/www.fanbox.cc\/@(.[^/]*)/;
     const userId = url.match(regExp)[1];
     return userId;
   }

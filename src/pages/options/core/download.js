@@ -1,3 +1,5 @@
+import optionsPageSender from "/@/utils/optionsPageSender";
+
 function chromDownLoad(file, opt, callback) {
   console.log(`${file.fileName} _begin_download`);
   return chrome.downloads.download(
@@ -13,8 +15,7 @@ function chromDownLoad(file, opt, callback) {
 }
 
 export default class DownLoad {
-  constructor(max, downLoadList, port) {
-    this.port = port;
+  constructor(max, downLoadList) {
     this.#maxLimit = max || 0;
     this.downLoadList = downLoadList || [];
     this.#downLoadingItem = new Map();
@@ -22,8 +23,6 @@ export default class DownLoad {
     this.#isCancel = false;
     this.#isPause = false;
   }
-
-  port = null;
 
   downLoadList = [];
 
@@ -54,13 +53,10 @@ export default class DownLoad {
       if (detail?.state?.current === "complete") {
         this.#downLoadedItem.push(_id);
         this.#runnerCount -= 1;
-        this.port.postMessage({
-          args: {
-            file: this.#downLoadingItem.get(_id),
-            msg: "download_success",
-          },
-          event: "download_success",
-        });
+        optionsPageSender.emit(
+          "download_success",
+          this.#downLoadingItem.get(_id)
+        );
         if (
           this.#runnerCount < this.#maxLimit &&
           this.#taskIndex < this.downLoadList.length &&

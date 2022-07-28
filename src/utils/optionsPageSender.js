@@ -4,11 +4,8 @@ class OptionsPageSender extends EventEmitter {
   constructor(event) {
     super();
     Object.entries(event || {}).forEach(([key, val]) => this.on(key, val));
-    console.log("opt_listener");
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const { event: _event, args: _args } = request;
-      console.log(`opt_request`, request);
-      console.log("opt_sender", sender);
       this.emit(_event, _args).then((res) => {
         res && sendResponse(res);
       });
@@ -18,7 +15,7 @@ class OptionsPageSender extends EventEmitter {
 
   currentPort = null;
 
-  static sendRunTimeMsg({ event, args, callback }) {
+  sendRunTimeMsg({ event, args, callback }) {
     const eventBody = { event, args: args || {} };
     chrome.runtime.sendMessage(eventBody, callback);
   }
@@ -44,4 +41,6 @@ class OptionsPageSender extends EventEmitter {
   }
 }
 
-export default OptionsPageSender;
+const optionsPageSender = new OptionsPageSender();
+
+export default optionsPageSender;
