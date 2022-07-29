@@ -3,7 +3,7 @@ import packageJson from "../package.json";
 const manifest = {
   manifest_version: 3,
   name: packageJson.name,
-  permissions: ["downloads"],
+  permissions: ["downloads", "storage"],
   host_permissions: ["*://*.fanbox.cc/*"],
   version: packageJson.version,
   description: packageJson.description,

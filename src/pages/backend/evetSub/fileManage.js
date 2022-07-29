@@ -3,17 +3,16 @@ import backendReceiver from "/@/utils/backendReceiver";
 
 export default {
   async backend_file_list_push({ list }) {
-    console.log(`list`, list);
-
     (list || []).forEach((item) => {
       const { userName } = item;
-      _store.filterFileList.set(userName, item);
+      _store.filterFileList[userName] = item;
     });
-
-    if (_store.optViewId) {
+    const optViewId = await Reflect.get(_store.optViewId);
+    if (optViewId) {
+      const filterFileList = await Reflect.get(_store.filterFileList);
       let isOptViewTab = false;
       await chrome.tabs
-        .get(_store.optViewId)
+        .get(optViewId)
         .then(() => {
           isOptViewTab = true;
         })
@@ -21,24 +20,17 @@ export default {
           isOptViewTab = false;
         });
       if (isOptViewTab) {
-        const res = [];
-        _store.filterFileList.forEach((value) => {
-          res.push(value);
-        });
         backendReceiver.sendTabMsgById({
           event: "options_draftList_init",
-          args: res,
-          id: _store.optViewId,
+          args: Object.values(filterFileList),
+          id: optViewId,
         });
       }
     }
   },
-  backend_file_list_pop(args, port, sender) {
-    _store.optViewId = sender.tab.id;
-    const res = [];
-    _store.filterFileList.forEach((value) => {
-      res.push(value);
-    });
-    return res;
+  async backend_file_list_pop(args, port, sender) {
+    Reflect.set(_store.optViewId, "", sender.tab.id);
+    const filterFileList = await Reflect.get(_store.filterFileList);
+    return Object.values(filterFileList);
   },
 };
