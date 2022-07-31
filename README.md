@@ -1,7 +1,12 @@
-# Vue 3 + Vite
+# Introduction
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is a chrome extension that let you download images from Pixiv Fanbox in batches.
 
-## Recommended IDE Setup
+# Install
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+1. clone the master branch
+2. run `npm i` to install dependencies
+3. run `npm run build` to generate the folder that named `dist`
+4. enter the extension management. Chrome clicks "More Tools" - "Extensions Management" in the menu
+5. on the extension management page, enable "Developer Mode".
+6. click the button "Load unpacked" and select the folder that you generate just before.
