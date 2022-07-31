@@ -6,9 +6,15 @@
       class="ex-mask-frame-mask"
       :class="selectedStatus"
     >
-      <el-icon v-show="status === 'success'"><Check /></el-icon>
-      <el-icon v-show="status === 'error'"><Close /></el-icon>
-      <el-icon v-show="status === 'pause'"><VideoPause /></el-icon>
+      <el-icon v-show="status === 'success'">
+        <slot name="success"><Check /></slot>
+      </el-icon>
+      <el-icon v-show="status === 'error'"
+        ><slot name="error"><Close /></slot
+      ></el-icon>
+      <el-icon v-show="status === 'pause'">
+        <slot name="pause"><VideoPause /></slot>
+      </el-icon>
       <el-progress
         v-show="status === 'downloading'"
         :percentage="50"

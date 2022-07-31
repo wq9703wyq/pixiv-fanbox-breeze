@@ -6,7 +6,10 @@ export default {
     _store.mainPanelForm = { ...(mainPanelForm || {}) };
   },
   // popup 初始化读取保存表单
-  popup_init() {
-    return _store.mainPanelForm;
+  async popup_init() {
+    const res = await _store.mainPanelForm;
+    console.log("mainPanelForm", res);
+    const { mainPanelForm } = res;
+    return mainPanelForm;
   },
 };
