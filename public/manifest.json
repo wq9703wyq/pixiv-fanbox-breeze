@@ -1,19 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "vite-chrome-extension-template",
+  "name": "Pixiv Fanbox Breeze",
   "permissions": ["downloads", "storage"],
   "host_permissions": ["*://*.fanbox.cc/*"],
-  "version": "0.0.0",
+  "version": "0.1.0",
   "options_page": "src/pages/options/index.html",
   "background": {
     "service_worker": "src/pages/backend/index.js"
   },
   "action": {
     "default_popup": "src/pages/popup/index.html",
-    "default_icon": "favicon-32.png"
+    "default_icon": "fanbox_icon.png"
   },
   "icons": {
-    "128": "favicon-144.png"
+    "128": "fanbox_icon.png"
   },
   "content_scripts": [
     {
@@ -25,7 +25,7 @@
   "devtools_page": "src/pages/devtools/index.html",
   "web_accessible_resources": [
     {
-      "resources": ["contentStyle.css", "favicon-144.png", "favicon-32.png"],
+      "resources": ["contentStyle.css", "fanbox_icon.png"],
       "matches": []
     }
   ]

@@ -8,11 +8,11 @@ export default class OptEventEmitter {
       this.eventList[event].push(callback);
   }
 
-  async emit(event, args, port) {
+  async emit(event, args) {
     const fnList = this.eventList[event] || [];
     if (!fnList.length) {
       return false;
     }
-    return Promise.all(fnList.map((fn) => fn(args, port)));
+    return Promise.all(fnList.map((fn) => fn(args)));
   }
 }

@@ -8,11 +8,11 @@ export default class EventEmitter {
       this.eventList[event].push(callback);
   }
 
-  emit(event, args, port) {
+  emit(event, args, sender) {
     const fnList = this.eventList[event] || [];
     if (!fnList.length) {
       return false;
     }
-    return Promise.all(fnList.map((fn) => fn(args, port)));
+    return Promise.all(fnList.map((fn) => fn(args, sender)));
   }
 }

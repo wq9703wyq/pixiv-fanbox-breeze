@@ -3,12 +3,12 @@ import BackendEventEmitter from "./backendEventEmitter.js";
 class BackendReceiver extends BackendEventEmitter {
   constructor() {
     super();
-    console.log("backend inner class");
+    console.log("backend_receiver init");
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const { event, args } = request;
       console.log(`backend_request`, request);
       console.log("backend_sender", sender);
-      this.emit(event, args, null, sender).then((res) => {
+      this.emit(event, args, sender).then((res) => {
         res && sendResponse(res);
       });
       return true;
@@ -19,7 +19,7 @@ class BackendReceiver extends BackendEventEmitter {
       port.onMessage.addListener(async (request) => {
         const { event, args } = request;
         const res = await this.emit(event, args);
-        port.postMessage(res);
+        res && port.postMessage(res);
       });
     });
   }
@@ -36,5 +36,4 @@ class BackendReceiver extends BackendEventEmitter {
 }
 
 const backendReceiver = new BackendReceiver();
-console.log("backendReceiver");
 export default backendReceiver;

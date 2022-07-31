@@ -12,10 +12,12 @@ class Store {
       const { filterFileList } = await chrome.storage.local.get([
         "filterFileList",
       ]);
+      console.log("filterFileList", filterFileList);
       return filterFileList;
     },
     {
-      get: (obj) => obj(),
+      get: async (obj, prop) =>
+        prop === "value" ? obj() : (await obj())[prop],
       set: async (obj, prop, value) => {
         const _obj = await obj();
         chrome.storage.local.set({
@@ -24,34 +26,21 @@ class Store {
       },
     }
   );
-
-  mainPanelForm = new Proxy(
-    async () => {
-      const { mainPanelForm } = await chrome.storage.local.get([
-        "mainPanelForm",
-      ]);
-      return mainPanelForm;
-    },
-    {
-      get: (obj) => obj(),
-      set: (obj, prop, value) => {
-        chrome.storage.local.set({ mainPanelForm: value });
-      },
-    }
-  );
-
-  optViewId = new Proxy(
-    async () => {
-      const { optViewId } = await chrome.storage.local.get(["optViewId"]);
-      return optViewId;
-    },
-    {
-      get: (obj) => obj(),
-      set: (obj, prop, value) => {
-        chrome.storage.local.set({ optViewId: value });
-      },
-    }
-  );
 }
-const sotre = new Store();
-export default sotre;
+const store = new Store();
+
+const setFns = {};
+
+const getFns = {
+  filterFileList: () => store.filterFileList,
+};
+
+const stoewProxy = new Proxy(store, {
+  get: (_store, prop) =>
+    getFns[prop]?.call(_store, _store, prop) ||
+    chrome.storage.local.get([prop]),
+  set: (_store, prop, value) =>
+    setFns[prop]?.call(_store, _store, prop, value) ||
+    chrome.storage.local.set({ [prop]: value }),
+});
+export default stoewProxy;

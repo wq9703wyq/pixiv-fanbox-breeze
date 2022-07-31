@@ -1,7 +1,7 @@
 {
-  "name": "vite-chrome-extension-template",
+  "name": "Pixiv Fanbox Breeze",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "dev": "nodemon",
     "build": "vite build",

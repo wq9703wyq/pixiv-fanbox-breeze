@@ -8,11 +8,11 @@ export default class BackendEventEmitter {
       this.eventList[event].push(callback);
   }
 
-  async emit(event, args, port, sender) {
+  async emit(event, args, sender) {
     const fnList = this.eventList[event] || [];
     if (!fnList.length) {
       return false;
     }
-    return Promise.all(fnList.map((fn) => fn(args, port, sender)));
+    return Promise.all(fnList.map((fn) => fn(args, sender)));
   }
 }

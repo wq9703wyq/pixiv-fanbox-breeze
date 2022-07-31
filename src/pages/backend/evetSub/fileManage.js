@@ -7,9 +7,9 @@ export default {
       const { userName } = item;
       _store.filterFileList[userName] = item;
     });
-    const optViewId = await Reflect.get(_store.optViewId);
+    const { optViewId } = await _store.optViewId;
     if (optViewId) {
-      const filterFileList = await Reflect.get(_store.filterFileList);
+      const filterFileList = await _store.filterFileList.value;
       let isOptViewTab = false;
       await chrome.tabs
         .get(optViewId)
@@ -28,9 +28,9 @@ export default {
       }
     }
   },
-  async backend_file_list_pop(args, port, sender) {
-    Reflect.set(_store.optViewId, "", sender.tab.id);
-    const filterFileList = await Reflect.get(_store.filterFileList);
+  async backend_file_list_pop(args, sender) {
+    _store.optViewId = sender.tab.id;
+    const filterFileList = await _store.filterFileList.value;
     return Object.values(filterFileList);
   },
 };
